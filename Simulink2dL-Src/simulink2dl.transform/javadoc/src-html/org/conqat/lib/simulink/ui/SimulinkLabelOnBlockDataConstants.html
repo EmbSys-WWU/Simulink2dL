@@ -1,0 +1,506 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*-----------------------------------------------------------------------+<a name="line.1"></a>
+<span class="sourceLineNo">002</span> | com.teamscale.index<a name="line.2"></a>
+<span class="sourceLineNo">003</span> |                                                                       |<a name="line.3"></a>
+<span class="sourceLineNo">004</span>   $Id$            <a name="line.4"></a>
+<span class="sourceLineNo">005</span> |                                                                       |<a name="line.5"></a>
+<span class="sourceLineNo">006</span> | Copyright (c)  2009-2015 CQSE GmbH                                 |<a name="line.6"></a>
+<span class="sourceLineNo">007</span> +-----------------------------------------------------------------------*/<a name="line.7"></a>
+<span class="sourceLineNo">008</span>package org.conqat.lib.simulink.ui;<a name="line.8"></a>
+<span class="sourceLineNo">009</span><a name="line.9"></a>
+<span class="sourceLineNo">010</span>/**<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * Constants class containing all icon file names for simulink blocks.<a name="line.11"></a>
+<span class="sourceLineNo">012</span> */<a name="line.12"></a>
+<span class="sourceLineNo">013</span>public class SimulinkLabelOnBlockDataConstants {<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>        /** The file name of the switch icon */<a name="line.15"></a>
+<span class="sourceLineNo">016</span>        public static final String ICON_FOR_SWITCH_BLOCK = "switch.png";<a name="line.16"></a>
+<span class="sourceLineNo">017</span><a name="line.17"></a>
+<span class="sourceLineNo">018</span>        /** the file name of the terminator icon */<a name="line.18"></a>
+<span class="sourceLineNo">019</span>        public static final String ICON_FOR_TERMINATOR_BLOCK = "terminator.png";<a name="line.19"></a>
+<span class="sourceLineNo">020</span><a name="line.20"></a>
+<span class="sourceLineNo">021</span>        /** Text displayed on data type conversion blocks */<a name="line.21"></a>
+<span class="sourceLineNo">022</span>        public static final String TEXT_ON_DATA_TYPE_CONVERSION_BLOCK = "Convert";<a name="line.22"></a>
+<span class="sourceLineNo">023</span><a name="line.23"></a>
+<span class="sourceLineNo">024</span>        /** Text displayed on product blocks */<a name="line.24"></a>
+<span class="sourceLineNo">025</span>        public static final String TEXT_ON_PRODUCT_BLOCK = "x";<a name="line.25"></a>
+<span class="sourceLineNo">026</span><a name="line.26"></a>
+<span class="sourceLineNo">027</span>        /** Text displayed on matrix product blocks */<a name="line.27"></a>
+<span class="sourceLineNo">028</span>        public static final String TEXT_ON_MATRIX_PRODUCT_BLOCK = "Matrix\nMultiply";<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>        /** Text displayed on data type duplicate block */<a name="line.30"></a>
+<span class="sourceLineNo">031</span>        public static final String TEXT_ON_DATA_TYPE_DUPLICATE_BLOCK = "Same\nDT";<a name="line.31"></a>
+<span class="sourceLineNo">032</span><a name="line.32"></a>
+<span class="sourceLineNo">033</span>        /** the file name of the bus icon */<a name="line.33"></a>
+<span class="sourceLineNo">034</span>        public static final String ICON_FOR_BUS_BLOCK = "bus.png";<a name="line.34"></a>
+<span class="sourceLineNo">035</span><a name="line.35"></a>
+<span class="sourceLineNo">036</span>        /** the file name of the selector icon */<a name="line.36"></a>
+<span class="sourceLineNo">037</span>        public static final String ICON_FOR_SELECTOR_BLOCK = "selector.png";<a name="line.37"></a>
+<span class="sourceLineNo">038</span><a name="line.38"></a>
+<span class="sourceLineNo">039</span>        /** the file name of the ground icon */<a name="line.39"></a>
+<span class="sourceLineNo">040</span>        public static final String ICON_FOR_GROUND_BLOCK = "ground.png";<a name="line.40"></a>
+<span class="sourceLineNo">041</span><a name="line.41"></a>
+<span class="sourceLineNo">042</span>        /** the file name of the UnitDelay icon */<a name="line.42"></a>
+<span class="sourceLineNo">043</span>        public static final String ICON_FOR_UNIT_DELAY_BLOCK = "unit_delay.png";<a name="line.43"></a>
+<span class="sourceLineNo">044</span><a name="line.44"></a>
+<span class="sourceLineNo">045</span>        /** Icon file name for the default integrator block */<a name="line.45"></a>
+<span class="sourceLineNo">046</span>        public static final String ICON_FOR_INTEGRATOR_DEFAULT = "integrator.png";<a name="line.46"></a>
+<span class="sourceLineNo">047</span><a name="line.47"></a>
+<span class="sourceLineNo">048</span>        /** Icon file name for the integrator block with limit out */<a name="line.48"></a>
+<span class="sourceLineNo">049</span>        public static final String ICON_FOR_INTEGRATOR_LIMIT_OUTPUT = "integrator_limit.png";<a name="line.49"></a>
+<span class="sourceLineNo">050</span><a name="line.50"></a>
+<span class="sourceLineNo">051</span>        /** Icon file name for the integrator block with wrap state */<a name="line.51"></a>
+<span class="sourceLineNo">052</span>        public static final String ICON_FOR_INTEGRATOR_WRAP_STATE = "integrator_wrap.png";<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>        /**<a name="line.54"></a>
+<span class="sourceLineNo">055</span>         * Icon file name for the integrator block with external initial condition<a name="line.55"></a>
+<span class="sourceLineNo">056</span>         * source<a name="line.56"></a>
+<span class="sourceLineNo">057</span>         */<a name="line.57"></a>
+<span class="sourceLineNo">058</span>        public static final String EXTERNAL_INITIAL_CONDITION_SOURCE = "xo.png";<a name="line.58"></a>
+<span class="sourceLineNo">059</span><a name="line.59"></a>
+<span class="sourceLineNo">060</span>        /** Icon file name for the integrator block with reset = rising */<a name="line.60"></a>
+<span class="sourceLineNo">061</span>        public static final String RESET_RISING = "reset_rising.png";<a name="line.61"></a>
+<span class="sourceLineNo">062</span><a name="line.62"></a>
+<span class="sourceLineNo">063</span>        /** Icon file name for the integrator block with reset = falling */<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        public static final String RESET_FALLING = "reset_falling.png";<a name="line.64"></a>
+<span class="sourceLineNo">065</span><a name="line.65"></a>
+<span class="sourceLineNo">066</span>        /** Icon file name for the integrator block with reset = either */<a name="line.66"></a>
+<span class="sourceLineNo">067</span>        public static final String RESET_EITHER = "reset_either.png";<a name="line.67"></a>
+<span class="sourceLineNo">068</span><a name="line.68"></a>
+<span class="sourceLineNo">069</span>        /** Icon file name for the integrator block with reset = level */<a name="line.69"></a>
+<span class="sourceLineNo">070</span>        public static final String RESET_LEVEL = "reset_level.png";<a name="line.70"></a>
+<span class="sourceLineNo">071</span><a name="line.71"></a>
+<span class="sourceLineNo">072</span>        /** Icon file name for the integrator block with reset = level hold */<a name="line.72"></a>
+<span class="sourceLineNo">073</span>        public static final String RESET_LEVEL_HOLD = "reset_level_hold.png";<a name="line.73"></a>
+<span class="sourceLineNo">074</span><a name="line.74"></a>
+<span class="sourceLineNo">075</span>        /** Icon file name for the Delay block with reset = level hold */<a name="line.75"></a>
+<span class="sourceLineNo">076</span>        public static final String RESET_LEVEL_DELAY = "reset_level_delay.png";<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>        /**<a name="line.78"></a>
+<span class="sourceLineNo">079</span>         * Icon file name for SignalConversion with ConversionOutput = Signal copy<a name="line.79"></a>
+<span class="sourceLineNo">080</span>         */<a name="line.80"></a>
+<span class="sourceLineNo">081</span>        public static final String ICON_CONVERSION_SIGNAL_COPY = "signal_copy.png";<a name="line.81"></a>
+<span class="sourceLineNo">082</span><a name="line.82"></a>
+<span class="sourceLineNo">083</span>        /**<a name="line.83"></a>
+<span class="sourceLineNo">084</span>         * Icon file name for SignalConversion with ConversionOutput = Virtual bus<a name="line.84"></a>
+<span class="sourceLineNo">085</span>         */<a name="line.85"></a>
+<span class="sourceLineNo">086</span>        public static final String ICON_CONVERSION_VIRTUAL_BUS = "virtual_bus.png";<a name="line.86"></a>
+<span class="sourceLineNo">087</span><a name="line.87"></a>
+<span class="sourceLineNo">088</span>        /**<a name="line.88"></a>
+<span class="sourceLineNo">089</span>         * Icon file name for SignalConversion with ConversionOutput = Nonvirtual<a name="line.89"></a>
+<span class="sourceLineNo">090</span>         * bus<a name="line.90"></a>
+<span class="sourceLineNo">091</span>         */<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        public static final String ICON_CONVERSION_NONVIRTUAL_BUS = "nonvirtual_bus.png";<a name="line.92"></a>
+<span class="sourceLineNo">093</span><a name="line.93"></a>
+<span class="sourceLineNo">094</span>        /** Text representing a function */<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        public static final String FUNCTION_TEXT = "f()";<a name="line.95"></a>
+<span class="sourceLineNo">096</span><a name="line.96"></a>
+<span class="sourceLineNo">097</span>        /** Icon file name for Mux/Demux with DisplayOption = bar */<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        public static final String MUX_BAR_ICON = "mux_bar.png";<a name="line.98"></a>
+<span class="sourceLineNo">099</span><a name="line.99"></a>
+<span class="sourceLineNo">100</span>        /** Icon file name for the saturation dynamic reference block */<a name="line.100"></a>
+<span class="sourceLineNo">101</span>        public static final String ICON_FOR_SATURATION_DYNAMIC_BLOCK = "saturation_dynamic.png";<a name="line.101"></a>
+<span class="sourceLineNo">102</span><a name="line.102"></a>
+<span class="sourceLineNo">103</span>        /** Icon file name for the enabled Assertion block */<a name="line.103"></a>
+<span class="sourceLineNo">104</span>        public static final String ICON_FOR_ASSERTION_ENABELD = "assertion_enabled.png";<a name="line.104"></a>
+<span class="sourceLineNo">105</span><a name="line.105"></a>
+<span class="sourceLineNo">106</span>        /** Icon file name for the disabled Assertion block */<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        public static final String ICON_FOR_ASSERTION_DISABLED = "assertion_disabled.png";<a name="line.107"></a>
+<span class="sourceLineNo">108</span><a name="line.108"></a>
+<span class="sourceLineNo">109</span>        /** Icon file name for the increasing Step block */<a name="line.109"></a>
+<span class="sourceLineNo">110</span>        public static final String ICON_FOR_STEP_INC = "step_increase.png";<a name="line.110"></a>
+<span class="sourceLineNo">111</span><a name="line.111"></a>
+<span class="sourceLineNo">112</span>        /** Icon file name for the decreasing Step block */<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        public static final String ICON_FOR_STEP_DEC = "step_decrease.png";<a name="line.113"></a>
+<span class="sourceLineNo">114</span><a name="line.114"></a>
+<span class="sourceLineNo">115</span>        /** Icon file name for the IntervalTestDynamic block (Left=on,Right=on) */<a name="line.115"></a>
+<span class="sourceLineNo">116</span>        public static final String ICON_FOR_INTERVAL_TEST_DYNAMIC_LC_RC = "interval_lc_rc.png";<a name="line.116"></a>
+<span class="sourceLineNo">117</span><a name="line.117"></a>
+<span class="sourceLineNo">118</span>        /** Icon file name for the IntervalTestDynamic block (Left=on,Right=off) */<a name="line.118"></a>
+<span class="sourceLineNo">119</span>        public static final String ICON_FOR_INTERVAL_TEST_DYNAMIC_LC_RO = "interval_lc_ro.png";<a name="line.119"></a>
+<span class="sourceLineNo">120</span><a name="line.120"></a>
+<span class="sourceLineNo">121</span>        /** Icon file name for the IntervalTestDynamic block (Left=off,Right=on) */<a name="line.121"></a>
+<span class="sourceLineNo">122</span>        public static final String ICON_FOR_INTERVAL_TEST_DYNAMIC_LO_RC = "interval_lo_rc.png";<a name="line.122"></a>
+<span class="sourceLineNo">123</span><a name="line.123"></a>
+<span class="sourceLineNo">124</span>        /** Icon file name for the IntervalTestDynamic block (Left=off,Right=off) */<a name="line.124"></a>
+<span class="sourceLineNo">125</span>        public static final String ICON_FOR_INTERVAL_TEST_DYNAMIC_LO_RO = "interval_lo_ro.png";<a name="line.125"></a>
+<span class="sourceLineNo">126</span><a name="line.126"></a>
+<span class="sourceLineNo">127</span>        /** Text displayed on WhileIterator blocks (blockType = do-while) */<a name="line.127"></a>
+<span class="sourceLineNo">128</span>        public static final String TEXT_ON_WHILE_ITERATOR_BLOCK_DO = "do {\n ...\n} while";<a name="line.128"></a>
+<span class="sourceLineNo">129</span><a name="line.129"></a>
+<span class="sourceLineNo">130</span>        /** Text displayed on WhileIterator blocks (blockType != do-while) */<a name="line.130"></a>
+<span class="sourceLineNo">131</span>        public static final String TEXT_ON_WHILE_ITERATOR_BLOCK = "while {\n ...\n}";<a name="line.131"></a>
+<span class="sourceLineNo">132</span><a name="line.132"></a>
+<span class="sourceLineNo">133</span>        /** Text displayed on WhileIterator subsystems (blockType = do-while) */<a name="line.133"></a>
+<span class="sourceLineNo">134</span>        public static final String TEXT_ON_WHILE_ITERATOR_SUBSYSTEM_DO = "do { ... } while";<a name="line.134"></a>
+<span class="sourceLineNo">135</span><a name="line.135"></a>
+<span class="sourceLineNo">136</span>        /** Text displayed on WhileIterator subsystems (blockType != do-while) */<a name="line.136"></a>
+<span class="sourceLineNo">137</span>        public static final String TEXT_ON_WHILE_ITERATOR_SUBSYSTEM = "while {\n ...\n}";<a name="line.137"></a>
+<span class="sourceLineNo">138</span><a name="line.138"></a>
+<span class="sourceLineNo">139</span>        /** Text displayed on WhileIterator subsystems (blockType != do-while) */<a name="line.139"></a>
+<span class="sourceLineNo">140</span>        public static final String TEXT_ON_FOR_ITERATOR_SUBSYSTEM = "for { ... }";<a name="line.140"></a>
+<span class="sourceLineNo">141</span><a name="line.141"></a>
+<span class="sourceLineNo">142</span>        /** Icon file name for the NDLookup block Element 1D */<a name="line.142"></a>
+<span class="sourceLineNo">143</span>        public static final String ICON_FOR_NDLOOKUP_ELEMENT_1 = "ndlookup_1element.png";<a name="line.143"></a>
+<span class="sourceLineNo">144</span><a name="line.144"></a>
+<span class="sourceLineNo">145</span>        /** Icon file name for the NDLookup block Element 2D */<a name="line.145"></a>
+<span class="sourceLineNo">146</span>        public static final String ICON_FOR_NDLOOKUP_ELEMENT_2 = "ndlookup_2element.png";<a name="line.146"></a>
+<span class="sourceLineNo">147</span><a name="line.147"></a>
+<span class="sourceLineNo">148</span>        /** Icon file name for the NDLookup block Element 3D */<a name="line.148"></a>
+<span class="sourceLineNo">149</span>        public static final String ICON_FOR_NDLOOKUP_ELEMENT_3 = "ndlookup_3element.png";<a name="line.149"></a>
+<span class="sourceLineNo">150</span><a name="line.150"></a>
+<span class="sourceLineNo">151</span>        /** Icon file name for the NDLookup block Element 4D or more */<a name="line.151"></a>
+<span class="sourceLineNo">152</span>        public static final String ICON_FOR_NDLOOKUP_ELEMENT_4 = "ndlookup_4element.png";<a name="line.152"></a>
+<span class="sourceLineNo">153</span><a name="line.153"></a>
+<span class="sourceLineNo">154</span>        /** Icon file name for the NDLookup block Column */<a name="line.154"></a>
+<span class="sourceLineNo">155</span>        public static final String ICON_FOR_NDLOOKUP_COLUMN = "ndlookup_column.png";<a name="line.155"></a>
+<span class="sourceLineNo">156</span><a name="line.156"></a>
+<span class="sourceLineNo">157</span>        /** Icon file name for the NDLookup block Matrix */<a name="line.157"></a>
+<span class="sourceLineNo">158</span>        public static final String ICON_FOR_NDLOOKUP_MATRIX = "ndlookup_matrix.png";<a name="line.158"></a>
+<span class="sourceLineNo">159</span><a name="line.159"></a>
+<span class="sourceLineNo">160</span>        /** Icon file name for the PreLookup block Matrix */<a name="line.160"></a>
+<span class="sourceLineNo">161</span>        public static final String ICON_FOR_PRELOOKUP_DIALOG_INDEX = "prelookup_dialog_index.png";<a name="line.161"></a>
+<span class="sourceLineNo">162</span><a name="line.162"></a>
+<span class="sourceLineNo">163</span>        /** Icon file name for the PreLookup block Matrix */<a name="line.163"></a>
+<span class="sourceLineNo">164</span>        public static final String ICON_FOR_PRELOOKUP_DIALOG_FRACTION = "prelookup_dialog_fraction.png";<a name="line.164"></a>
+<span class="sourceLineNo">165</span><a name="line.165"></a>
+<span class="sourceLineNo">166</span>        /** Icon file name for the PreLookup block Matrix */<a name="line.166"></a>
+<span class="sourceLineNo">167</span>        public static final String ICON_FOR_PRELOOKUP_INPORT_INDEX = "prelookup_inport_index.png";<a name="line.167"></a>
+<span class="sourceLineNo">168</span><a name="line.168"></a>
+<span class="sourceLineNo">169</span>        /** Icon file name for the PreLookup block Matrix */<a name="line.169"></a>
+<span class="sourceLineNo">170</span>        public static final String ICON_FOR_PRELOOKUP_INPORT_FRACTION = "prelookup_inport_fraction.png";<a name="line.170"></a>
+<span class="sourceLineNo">171</span><a name="line.171"></a>
+<span class="sourceLineNo">172</span>        /** Text for AlgebraicConstraint block */<a name="line.172"></a>
+<span class="sourceLineNo">173</span>        public static final String TEXT_FOR_ALGEBRAIC_CONSTRAINT_BLOCK = "Solve\nf(z) = 0";<a name="line.173"></a>
+<span class="sourceLineNo">174</span><a name="line.174"></a>
+<span class="sourceLineNo">175</span>        /**<a name="line.175"></a>
+<span class="sourceLineNo">176</span>         * Icon file name for the ComplexToMagnitudeAngle block (output = angle)<a name="line.176"></a>
+<span class="sourceLineNo">177</span>         */<a name="line.177"></a>
+<span class="sourceLineNo">178</span>        public static final String ICON_FOR_COMPLEX_TO_MA_ANGLE = "complex_to_ma_angle.png";<a name="line.178"></a>
+<span class="sourceLineNo">179</span>        /**<a name="line.179"></a>
+<span class="sourceLineNo">180</span>         * Icon file name for the ComplexToMagnitudeAngle block (output = magnitude<a name="line.180"></a>
+<span class="sourceLineNo">181</span>         * &amp; angle)<a name="line.181"></a>
+<span class="sourceLineNo">182</span>         */<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        public static final String ICON_FOR_COMPLEX_TO_MA_BOTH = "complex_to_ma_both.png";<a name="line.183"></a>
+<span class="sourceLineNo">184</span><a name="line.184"></a>
+<span class="sourceLineNo">185</span>        /** Icon file name for the ComplexToRealImag block (output = real &amp; imag) */<a name="line.185"></a>
+<span class="sourceLineNo">186</span>        public static final String ICON_FOR_COMPLEX_TO_RI_BOTH = "complex_to_ri_both.png";<a name="line.186"></a>
+<span class="sourceLineNo">187</span><a name="line.187"></a>
+<span class="sourceLineNo">188</span>        /** Icon file name for Sqrt block */<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        public static final String ICON_FOR_RSQRT = "rSqrt.png";<a name="line.189"></a>
+<span class="sourceLineNo">190</span><a name="line.190"></a>
+<span class="sourceLineNo">191</span>        /** Icon file name for Sqrt block */<a name="line.191"></a>
+<span class="sourceLineNo">192</span>        public static final String ICON_FOR_SIGNED_SQRT = "signedSqrt.png";<a name="line.192"></a>
+<span class="sourceLineNo">193</span><a name="line.193"></a>
+<span class="sourceLineNo">194</span>        /** Icon file name for Sqrt block */<a name="line.194"></a>
+<span class="sourceLineNo">195</span>        public static final String ICON_FOR_SQRT = "sqrt.png";<a name="line.195"></a>
+<span class="sourceLineNo">196</span><a name="line.196"></a>
+<span class="sourceLineNo">197</span>        /** Icon file name for exp Math block */<a name="line.197"></a>
+<span class="sourceLineNo">198</span>        public static final String ICON_FOR_EXP = "exp.png";<a name="line.198"></a>
+<span class="sourceLineNo">199</span><a name="line.199"></a>
+<span class="sourceLineNo">200</span>        /** Icon file name for 10^u Math block */<a name="line.200"></a>
+<span class="sourceLineNo">201</span>        public static final String ICON_FOR_10U = "Math_10u.png";<a name="line.201"></a>
+<span class="sourceLineNo">202</span><a name="line.202"></a>
+<span class="sourceLineNo">203</span>        /** Icon file name for magnitude^2 Math block */<a name="line.203"></a>
+<span class="sourceLineNo">204</span>        public static final String ICON_FOR_MAGNITUDE2 = "mag2.png";<a name="line.204"></a>
+<span class="sourceLineNo">205</span><a name="line.205"></a>
+<span class="sourceLineNo">206</span>        /** Icon file name for square Math block */<a name="line.206"></a>
+<span class="sourceLineNo">207</span>        public static final String ICON_FOR_SQUARE = "square.png";<a name="line.207"></a>
+<span class="sourceLineNo">208</span><a name="line.208"></a>
+<span class="sourceLineNo">209</span>        /** Icon file name for pow Math block */<a name="line.209"></a>
+<span class="sourceLineNo">210</span>        public static final String ICON_FOR_POW = "pow.png";<a name="line.210"></a>
+<span class="sourceLineNo">211</span><a name="line.211"></a>
+<span class="sourceLineNo">212</span>        /** Icon file name for conj Math block */<a name="line.212"></a>
+<span class="sourceLineNo">213</span>        public static final String ICON_FOR_CONJ = "conj.png";<a name="line.213"></a>
+<span class="sourceLineNo">214</span><a name="line.214"></a>
+<span class="sourceLineNo">215</span>        /** Icon file name for reciprocal Math block */<a name="line.215"></a>
+<span class="sourceLineNo">216</span>        public static final String ICON_FOR_RECIPROCAL = "reciprocal.png";<a name="line.216"></a>
+<span class="sourceLineNo">217</span><a name="line.217"></a>
+<span class="sourceLineNo">218</span>        /** Icon file name for transpose Math block */<a name="line.218"></a>
+<span class="sourceLineNo">219</span>        public static final String ICON_FOR_TRANSPOSE = "transpose.png";<a name="line.219"></a>
+<span class="sourceLineNo">220</span><a name="line.220"></a>
+<span class="sourceLineNo">221</span>        /** Icon file name for hermitian Math block */<a name="line.221"></a>
+<span class="sourceLineNo">222</span>        public static final String ICON_FOR_HERMITIAN = "hermitian.png";<a name="line.222"></a>
+<span class="sourceLineNo">223</span><a name="line.223"></a>
+<span class="sourceLineNo">224</span>        /**<a name="line.224"></a>
+<span class="sourceLineNo">225</span>         * Icon file name for the ComplexToMagnitudeAngle block (input = angle)<a name="line.225"></a>
+<span class="sourceLineNo">226</span>         */<a name="line.226"></a>
+<span class="sourceLineNo">227</span>        public static final String ICON_FOR_MA_TO_COMPLEX_ANGLE = "ma_to_complex_angle.png";<a name="line.227"></a>
+<span class="sourceLineNo">228</span>        /**<a name="line.228"></a>
+<span class="sourceLineNo">229</span>         * Icon file name for the ComplexToMagnitudeAngle block (input = magnitude &amp;<a name="line.229"></a>
+<span class="sourceLineNo">230</span>         * angle)<a name="line.230"></a>
+<span class="sourceLineNo">231</span>         */<a name="line.231"></a>
+<span class="sourceLineNo">232</span>        public static final String ICON_FOR_MA_TO_COMPLEX_MAGNITUDE = "ma_to_complex_magnitude.png";<a name="line.232"></a>
+<span class="sourceLineNo">233</span><a name="line.233"></a>
+<span class="sourceLineNo">234</span>        /**<a name="line.234"></a>
+<span class="sourceLineNo">235</span>         * Icon file name for the ComplexToMagnitudeAngle block (input = magnitude &amp;<a name="line.235"></a>
+<span class="sourceLineNo">236</span>         * angle)<a name="line.236"></a>
+<span class="sourceLineNo">237</span>         */<a name="line.237"></a>
+<span class="sourceLineNo">238</span>        public static final String ICON_FOR_MA_TO_COMPLEX_BOTH = "ma_to_complex_both.png";<a name="line.238"></a>
+<span class="sourceLineNo">239</span><a name="line.239"></a>
+<span class="sourceLineNo">240</span>        /** Icon file name for the ComplexToRealImag block (input = real &amp; imag) */<a name="line.240"></a>
+<span class="sourceLineNo">241</span>        public static final String ICON_FOR_RI_TO_COMPLEX_BOTH = "ri_to_complex_both.png";<a name="line.241"></a>
+<span class="sourceLineNo">242</span><a name="line.242"></a>
+<span class="sourceLineNo">243</span>        /**<a name="line.243"></a>
+<span class="sourceLineNo">244</span>         * Icon file name for the Reshape block (dimensionality = Column vector 2D)<a name="line.244"></a>
+<span class="sourceLineNo">245</span>         */<a name="line.245"></a>
+<span class="sourceLineNo">246</span>        public static final String ICON_FOR_RESHAPE_COLUMN = "reshape_column.png";<a name="line.246"></a>
+<span class="sourceLineNo">247</span><a name="line.247"></a>
+<span class="sourceLineNo">248</span>        /** Icon file name for the Reshape block (dimensionality = Row vector 2D) */<a name="line.248"></a>
+<span class="sourceLineNo">249</span>        public static final String ICON_FOR_RESHAPE_ROW = "reshape_row.png";<a name="line.249"></a>
+<span class="sourceLineNo">250</span><a name="line.250"></a>
+<span class="sourceLineNo">251</span>        /** Icon file name for Product block (Inputs="-") */<a name="line.251"></a>
+<span class="sourceLineNo">252</span>        public static final String ICON_FOR_MINUS_SIGMA = "minus_sum_sigma.png";<a name="line.252"></a>
+<span class="sourceLineNo">253</span><a name="line.253"></a>
+<span class="sourceLineNo">254</span>        /** Icon file name for Product block (Inputs="+") */<a name="line.254"></a>
+<span class="sourceLineNo">255</span>        public static final String ICON_FOR_SUM_SIGMA = "sum_sigma.png";<a name="line.255"></a>
+<span class="sourceLineNo">256</span><a name="line.256"></a>
+<span class="sourceLineNo">257</span>        /** Icon file name for Product block (Inputs="*" || "1") */<a name="line.257"></a>
+<span class="sourceLineNo">258</span>        public static final String ICON_FOR_PRODUCT_MULTIPLY = "product.png";<a name="line.258"></a>
+<span class="sourceLineNo">259</span><a name="line.259"></a>
+<span class="sourceLineNo">260</span>        /** Icon file name for Product block (Inputs="/") */<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        public static final String ICON_FOR_PRODUCT_DIVIDE = "product_divide.png";<a name="line.261"></a>
+<span class="sourceLineNo">262</span><a name="line.262"></a>
+<span class="sourceLineNo">263</span>        /** Icon filename for element-wise multiply Product block port */<a name="line.263"></a>
+<span class="sourceLineNo">264</span>        public static final String ICON_FOR_ELEMENT_MULTIPLY_PORT = "elementprod_mult.png";<a name="line.264"></a>
+<span class="sourceLineNo">265</span><a name="line.265"></a>
+<span class="sourceLineNo">266</span>        /** Icon filename for element-wise divide Product block port */<a name="line.266"></a>
+<span class="sourceLineNo">267</span>        public static final String ICON_FOR_ELEMENT_DIVIDE_PORT = "elementprod_divide.png";<a name="line.267"></a>
+<span class="sourceLineNo">268</span><a name="line.268"></a>
+<span class="sourceLineNo">269</span>        /** Icon filename for matrix multiply Product block port */<a name="line.269"></a>
+<span class="sourceLineNo">270</span>        public static final String ICON_FOR_MATRIX_MULTIPLY_PORT = "matrixprod_mult.png";<a name="line.270"></a>
+<span class="sourceLineNo">271</span><a name="line.271"></a>
+<span class="sourceLineNo">272</span>        /** Text displayed on DetectChange block */<a name="line.272"></a>
+<span class="sourceLineNo">273</span>        public static final String TEXT_ON_DETECT_CHANGE_BLOCK = "U ~= U/z";<a name="line.273"></a>
+<span class="sourceLineNo">274</span><a name="line.274"></a>
+<span class="sourceLineNo">275</span>        /** Icon filename for matrix multiply Product block port */<a name="line.275"></a>
+<span class="sourceLineNo">276</span>        public static final String ICON_FOR_DEAD_ZONE_DYNAMIC_BLOCK = "dead_zone_dynamic.png";<a name="line.276"></a>
+<span class="sourceLineNo">277</span><a name="line.277"></a>
+<span class="sourceLineNo">278</span>        /** Icon filename for matrix multiply Product block port */<a name="line.278"></a>
+<span class="sourceLineNo">279</span>        public static final String ICON_FOR_RAMP_BLOCK = "ramp.png";<a name="line.279"></a>
+<span class="sourceLineNo">280</span><a name="line.280"></a>
+<span class="sourceLineNo">281</span>        /** Icon filename for ManualSwitch block (CurrentSetting == 0) */<a name="line.281"></a>
+<span class="sourceLineNo">282</span>        public static final String ICON_FOR_MANUAL_SWITCH_0 = "manual_switch_0.png";<a name="line.282"></a>
+<span class="sourceLineNo">283</span><a name="line.283"></a>
+<span class="sourceLineNo">284</span>        /** Icon filename for ManualSwitch block (CurrentSetting == 1) */<a name="line.284"></a>
+<span class="sourceLineNo">285</span>        public static final String ICON_FOR_MANUAL_SWITCH_1 = "manual_switch_1.png";<a name="line.285"></a>
+<span class="sourceLineNo">286</span><a name="line.286"></a>
+<span class="sourceLineNo">287</span>        /** Icon filename for CounterFreeRunning block */<a name="line.287"></a>
+<span class="sourceLineNo">288</span>        public static final String ICON_FOR_COUNTER_FREE_RUNNING = "counter_free_running.png";<a name="line.288"></a>
+<span class="sourceLineNo">289</span><a name="line.289"></a>
+<span class="sourceLineNo">290</span>        /** Icon filename for CounterFreeRunning block */<a name="line.290"></a>
+<span class="sourceLineNo">291</span>        public static final String ICON_FOR_BAND_LIMITED_NOISE = "noise.png";<a name="line.291"></a>
+<span class="sourceLineNo">292</span><a name="line.292"></a>
+<span class="sourceLineNo">293</span>        /** Icon filename for DiscretePulseGenerator block */<a name="line.293"></a>
+<span class="sourceLineNo">294</span>        public static final String ICON_FOR_PULSE_GENERATOR_SAMPLE = "pulse_generator_sample.png";<a name="line.294"></a>
+<span class="sourceLineNo">295</span><a name="line.295"></a>
+<span class="sourceLineNo">296</span>        /** Icon filename for DiscretePulseGenerator block */<a name="line.296"></a>
+<span class="sourceLineNo">297</span>        public static final String ICON_FOR_PULSE_GENERATOR_SAMPLE_T = "pulse_generator_sample_t.png";<a name="line.297"></a>
+<span class="sourceLineNo">298</span><a name="line.298"></a>
+<span class="sourceLineNo">299</span>        /** Icon filename for DiscretePulseGenerator block */<a name="line.299"></a>
+<span class="sourceLineNo">300</span>        public static final String ICON_FOR_PULSE_GENERATOR_TIME = "pulse_generator_time.png";<a name="line.300"></a>
+<span class="sourceLineNo">301</span><a name="line.301"></a>
+<span class="sourceLineNo">302</span>        /** Icon filename for DiscretePulseGenerator block */<a name="line.302"></a>
+<span class="sourceLineNo">303</span>        public static final String ICON_FOR_PULSE_GENERATOR_TIME_T = "pulse_generator_time_t.png";<a name="line.303"></a>
+<span class="sourceLineNo">304</span><a name="line.304"></a>
+<span class="sourceLineNo">305</span>        /** Icon filename for enable block EnablePort */<a name="line.305"></a>
+<span class="sourceLineNo">306</span>        public static final String ICON_FOR_ENABLE_PORT = "enable_port_label.png";<a name="line.306"></a>
+<span class="sourceLineNo">307</span><a name="line.307"></a>
+<span class="sourceLineNo">308</span>        /** Icon filename for Delay block EnablePort */<a name="line.308"></a>
+<span class="sourceLineNo">309</span>        public static final String ICON_FOR_RESET_PORT = "reset_port_label.png";<a name="line.309"></a>
+<span class="sourceLineNo">310</span><a name="line.310"></a>
+<span class="sourceLineNo">311</span>        /** Icon filename for Concatenate block (Mode = Matrix) */<a name="line.311"></a>
+<span class="sourceLineNo">312</span>        public static final String ICON_FOR_MATRIX_CONCATENATE = "matrix_concatenate.png";<a name="line.312"></a>
+<span class="sourceLineNo">313</span><a name="line.313"></a>
+<span class="sourceLineNo">314</span>        /** Icon filename for MovingAverage BACE blocks (Fixed and Variable) */<a name="line.314"></a>
+<span class="sourceLineNo">315</span>        public static final String ICON_FOR_BACE_MOVING_AVERAGE = "bace_moving_average.png";<a name="line.315"></a>
+<span class="sourceLineNo">316</span><a name="line.316"></a>
+<span class="sourceLineNo">317</span>        /** Icon filename for TurnOnDelay BACE blocks */<a name="line.317"></a>
+<span class="sourceLineNo">318</span>        public static final String ICON_FOR_BACE_TURN_ON_DELAY = "bace_turn_on_delay.png";<a name="line.318"></a>
+<span class="sourceLineNo">319</span><a name="line.319"></a>
+<span class="sourceLineNo">320</span>        /** Icon filename for TurnOffDelay BACE blocks */<a name="line.320"></a>
+<span class="sourceLineNo">321</span>        public static final String ICON_FOR_BACE_TURN_OFF_DELAY = "bace_turn_off_delay.png";<a name="line.321"></a>
+<span class="sourceLineNo">322</span><a name="line.322"></a>
+<span class="sourceLineNo">323</span>        /** Icon file name of the BACE UnitDelay icon */<a name="line.323"></a>
+<span class="sourceLineNo">324</span>        public static final String ICON_FOR_BACE_UNIT_DELAY_BLOCK = "bace_unit_delay.png";<a name="line.324"></a>
+<span class="sourceLineNo">325</span><a name="line.325"></a>
+<span class="sourceLineNo">326</span>        /** Icon filename for CountDown BACE block */<a name="line.326"></a>
+<span class="sourceLineNo">327</span>        public static final String ICON_FOR_BACE_COUNTDOWN_BLOCK = "bace_countdown.png";<a name="line.327"></a>
+<span class="sourceLineNo">328</span><a name="line.328"></a>
+<span class="sourceLineNo">329</span>        /** Icon filename for Counter BACE block */<a name="line.329"></a>
+<span class="sourceLineNo">330</span>        public static final String ICON_FOR_BACE_COUNTER_BLOCK = "bace_counter.png";<a name="line.330"></a>
+<span class="sourceLineNo">331</span><a name="line.331"></a>
+<span class="sourceLineNo">332</span>        /** Icon filename for Timer BACE block */<a name="line.332"></a>
+<span class="sourceLineNo">333</span>        public static final String ICON_FOR_BACE_TIMER_BLOCK = "bace_timer.png";<a name="line.333"></a>
+<span class="sourceLineNo">334</span><a name="line.334"></a>
+<span class="sourceLineNo">335</span>        /** Icon filename for TimerRetrigger BACE block */<a name="line.335"></a>
+<span class="sourceLineNo">336</span>        public static final String ICON_FOR_BACE_TIMER_RETRIGGER_BLOCK = "bace_timer_retrigger.png";<a name="line.336"></a>
+<span class="sourceLineNo">337</span><a name="line.337"></a>
+<span class="sourceLineNo">338</span>        /** Icon filename for FixedStepDelay and VariableInputDelay BACE blocks */<a name="line.338"></a>
+<span class="sourceLineNo">339</span>        public static final String ICON_FOR_BACE_FIXED_VARIABLE_DELAY_BLOCK = "bace_fixed_variable_delay.png";<a name="line.339"></a>
+<span class="sourceLineNo">340</span><a name="line.340"></a>
+<span class="sourceLineNo">341</span>        /** Icon filename for Hysteresis BACE block */<a name="line.341"></a>
+<span class="sourceLineNo">342</span>        public static final String ICON_FOR_BACE_HYSTERESIS_BLOCK = "bace_hysteresis.png";<a name="line.342"></a>
+<span class="sourceLineNo">343</span><a name="line.343"></a>
+<span class="sourceLineNo">344</span>        /** Icon filename for RateLimiter BACE block */<a name="line.344"></a>
+<span class="sourceLineNo">345</span>        public static final String ICON_FOR_BACE_RATE_LIMITER_BLOCK = "bace_rate_limiter.png";<a name="line.345"></a>
+<span class="sourceLineNo">346</span><a name="line.346"></a>
+<span class="sourceLineNo">347</span>        /** Icon filename for RateLimiter BACE block */<a name="line.347"></a>
+<span class="sourceLineNo">348</span>        public static final String ICON_FOR_BACE_FADER_BLOCK = "bace_fader.png";<a name="line.348"></a>
+<span class="sourceLineNo">349</span><a name="line.349"></a>
+<span class="sourceLineNo">350</span>        /** Icon filename for RateLimiter BACE block */<a name="line.350"></a>
+<span class="sourceLineNo">351</span>        public static final String ICON_FOR_BACE_FADER_CONST_BLOCK = "bace_fader_const.png";<a name="line.351"></a>
+<span class="sourceLineNo">352</span><a name="line.352"></a>
+<span class="sourceLineNo">353</span>        /** Icon filename for RateLimiter BACE block */<a name="line.353"></a>
+<span class="sourceLineNo">354</span>        public static final String ICON_FOR_BACE_LOWPASS_FILTER_BLOCK = "bace_lowpass_filter.png";<a name="line.354"></a>
+<span class="sourceLineNo">355</span><a name="line.355"></a>
+<span class="sourceLineNo">356</span>        /** Text for Rampe BACE block label */<a name="line.356"></a>
+<span class="sourceLineNo">357</span>        public static final String TEXT_FOR_BACE_RAMPE_BLOCK = "Rampe\n[1/s]";<a name="line.357"></a>
+<span class="sourceLineNo">358</span><a name="line.358"></a>
+<span class="sourceLineNo">359</span>        /** Text for ClosedInterval BACE block label */<a name="line.359"></a>
+<span class="sourceLineNo">360</span>        public static final String TEXT_FOR_BACE_CLOSED_INTERVAL_BLOCK = "A&lt;=X&lt;=C";<a name="line.360"></a>
+<span class="sourceLineNo">361</span><a name="line.361"></a>
+<span class="sourceLineNo">362</span>        /** Icon filename for Extras' Digital clock block */<a name="line.362"></a>
+<span class="sourceLineNo">363</span>        public static final String ICON_FOR_EXTRAS_DIGITAL_CLOCK = "extras_digital_clock.png";<a name="line.363"></a>
+<span class="sourceLineNo">364</span><a name="line.364"></a>
+<span class="sourceLineNo">365</span>        /** Text for SignalChangeDetector BACE block label */<a name="line.365"></a>
+<span class="sourceLineNo">366</span>        public static final String TEXT_FOR_BACE_SIGNAL_CHANGE_DETECTOR = "Signal Change";<a name="line.366"></a>
+<span class="sourceLineNo">367</span><a name="line.367"></a>
+<span class="sourceLineNo">368</span>        /** Text for CertifiedSubsystem BACE block label */<a name="line.368"></a>
+<span class="sourceLineNo">369</span>        public static final String TEXT_FOR_BACE_CERTIFIED_SUBSYSTEM = "Not OK";<a name="line.369"></a>
+<span class="sourceLineNo">370</span><a name="line.370"></a>
+<span class="sourceLineNo">371</span>        /** Icon filename for ForEach Subsystem block */<a name="line.371"></a>
+<span class="sourceLineNo">372</span>        public static final String ICON_FOR_EACH_SUBSYSTEM = "for_each_subsystem.png";<a name="line.372"></a>
+<span class="sourceLineNo">373</span><a name="line.373"></a>
+<span class="sourceLineNo">374</span>        /** Text for BMW FunctionCallGenerator block */<a name="line.374"></a>
+<span class="sourceLineNo">375</span>        public static final String TEXT_FOR_BMW_FUNCTION_CALL_GENERATOR = "bace_fcall_generator";<a name="line.375"></a>
+<span class="sourceLineNo">376</span><a name="line.376"></a>
+<span class="sourceLineNo">377</span>        /** Icon filename for FunctionCallSplit block */<a name="line.377"></a>
+<span class="sourceLineNo">378</span>        public static final String ICON_FOR_FUNCTION_CALL_SPLIT = "fn_call_split.png";<a name="line.378"></a>
+<span class="sourceLineNo">379</span><a name="line.379"></a>
+<span class="sourceLineNo">380</span>        /** Text for FeedbackLatch BACE block label */<a name="line.380"></a>
+<span class="sourceLineNo">381</span>        public static final String TEXT_FOR_BACE_FEEDBACK_LATCH = "Feedback\nLatch";<a name="line.381"></a>
+<span class="sourceLineNo">382</span><a name="line.382"></a>
+<span class="sourceLineNo">383</span>        /** Icon filename for EdgeBi BACE block */<a name="line.383"></a>
+<span class="sourceLineNo">384</span>        public static final String ICON_FOR_BACE_EDGE_BI = "bace_edge_bi.png";<a name="line.384"></a>
+<span class="sourceLineNo">385</span><a name="line.385"></a>
+<span class="sourceLineNo">386</span>        /** Icon filename for EdgeFalling BACE block */<a name="line.386"></a>
+<span class="sourceLineNo">387</span>        public static final String ICON_FOR_BACE_EDGE_FALLING = "bace_edge_falling.png";<a name="line.387"></a>
+<span class="sourceLineNo">388</span><a name="line.388"></a>
+<span class="sourceLineNo">389</span>        /** Icon filename for EdgeRising BACE block */<a name="line.389"></a>
+<span class="sourceLineNo">390</span>        public static final String ICON_FOR_BACE_EDGE_RISING = "bace_edge_rising.png";<a name="line.390"></a>
+<span class="sourceLineNo">391</span><a name="line.391"></a>
+<span class="sourceLineNo">392</span>        /** Text for BitwiseNot BACE block label */<a name="line.392"></a>
+<span class="sourceLineNo">393</span>        public static final String TEXT_FOR_BACE_BITWISE_NOT = "Bitwise\nNOT";<a name="line.393"></a>
+<span class="sourceLineNo">394</span><a name="line.394"></a>
+<span class="sourceLineNo">395</span>        /** Text for IsFLoat BACE block label */<a name="line.395"></a>
+<span class="sourceLineNo">396</span>        public static final String TEXT_FOR_BACE_IS_FLOAT = "is float?";<a name="line.396"></a>
+<span class="sourceLineNo">397</span><a name="line.397"></a>
+<span class="sourceLineNo">398</span>        /** Text for RequireUnscaledVariable BACE block label */<a name="line.398"></a>
+<span class="sourceLineNo">399</span>        public static final String TEXT_FOR_BACE_REQUIRE_UNSCALED_VARIABLE = "NO\nFIXPOINT\nALLOWED";<a name="line.399"></a>
+<span class="sourceLineNo">400</span><a name="line.400"></a>
+<span class="sourceLineNo">401</span>        /** Text for Twice Bits Converter block BACE block label */<a name="line.401"></a>
+<span class="sourceLineNo">402</span>        public static final String TEXT_FOR_BACE_TWICE_BITS_CONVERTER = "Twice Bits\nSame Range";<a name="line.402"></a>
+<span class="sourceLineNo">403</span><a name="line.403"></a>
+<span class="sourceLineNo">404</span>        /** Icon for BACE DiscreteTimeIntegrator block */<a name="line.404"></a>
+<span class="sourceLineNo">405</span>        public static final String ICON_FOR_BACE_DISCRETE_TIME_INTEGRATOR = "bace_discrete_time_integrator.png";<a name="line.405"></a>
+<span class="sourceLineNo">406</span><a name="line.406"></a>
+<span class="sourceLineNo">407</span>        /** Icon for BACE MatlabFunction block */<a name="line.407"></a>
+<span class="sourceLineNo">408</span>        public static final String ICON_FOR_BACE_MATLAB_FUNCTION = "matlab_fn.png";<a name="line.408"></a>
+<span class="sourceLineNo">409</span><a name="line.409"></a>
+<span class="sourceLineNo">410</span>        /** Icon for BACE Integrator blocks */<a name="line.410"></a>
+<span class="sourceLineNo">411</span>        public static final String ICON_FOR_BACE_INTEGRATOR = "bace_integrator.png";<a name="line.411"></a>
+<span class="sourceLineNo">412</span><a name="line.412"></a>
+<span class="sourceLineNo">413</span>        /** Icon for DiscreteStateSpace block */<a name="line.413"></a>
+<span class="sourceLineNo">414</span>        public static final String ICON_FOR_DISCRETE_STATE_SPACE = "discrete_state_space.png";<a name="line.414"></a>
+<span class="sourceLineNo">415</span><a name="line.415"></a>
+<span class="sourceLineNo">416</span>        /** Icon for Reset Port with rising trigger type */<a name="line.416"></a>
+<span class="sourceLineNo">417</span>        public static final String ICON_FOR_RISING_RESET_PORT = "reset_rising_reset_port.png";<a name="line.417"></a>
+<span class="sourceLineNo">418</span>        <a name="line.418"></a>
+<span class="sourceLineNo">419</span>        /** Icon for Reset Port with falling trigger type */<a name="line.419"></a>
+<span class="sourceLineNo">420</span>        public static final String ICON_FOR_FALLING_RESET_PORT = "reset_falling_reset_port.png";<a name="line.420"></a>
+<span class="sourceLineNo">421</span>        <a name="line.421"></a>
+<span class="sourceLineNo">422</span>        /** Icon for Reset Port with either trigger type */<a name="line.422"></a>
+<span class="sourceLineNo">423</span>        public static final String ICON_FOR_EITHER_RESET_PORT = "reset_either_reset_port.png";<a name="line.423"></a>
+<span class="sourceLineNo">424</span>        <a name="line.424"></a>
+<span class="sourceLineNo">425</span>        /** Icon for Event Listener block with EventType Terminate */<a name="line.425"></a>
+<span class="sourceLineNo">426</span>        public static final String ICON_FOR_EVENT_LISTENER_TERMIINATE = "event_listener_terminate.png";<a name="line.426"></a>
+<span class="sourceLineNo">427</span>        <a name="line.427"></a>
+<span class="sourceLineNo">428</span>        /** Icon for Event Listener block with EventType Reset */<a name="line.428"></a>
+<span class="sourceLineNo">429</span>        public static final String ICON_FOR_EVENT_LISTENER_RESET = "event_listener_reset.png";<a name="line.429"></a>
+<span class="sourceLineNo">430</span>        <a name="line.430"></a>
+<span class="sourceLineNo">431</span>        /** Icon for Event Listener block with EventType Initialize */<a name="line.431"></a>
+<span class="sourceLineNo">432</span>        public static final String ICON_FOR_EVENT_LISTENER_INITIALIZE = "event_listener_initialize.png";<a name="line.432"></a>
+<span class="sourceLineNo">433</span><a name="line.433"></a>
+<span class="sourceLineNo">434</span>}<a name="line.434"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

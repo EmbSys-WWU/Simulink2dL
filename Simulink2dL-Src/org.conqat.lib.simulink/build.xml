@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+<!-- ==================================================================+
+ | Scanner                                                             |
+ |                                                                     |
+   $Id$            
+ |                                                                     |
+ | Copyright (c)  2004-2005 Technische Universitaet Muenchen           |
+ |                                                                     |
+ | Technische Universitaet Muenchen             #########  ##########  |
+ | Institut fuer Informatik - Lehrstuhl IV         ##  ##  ##  ##  ##  |
+ | Prof. Dr. Manfred Broy                          ##  ##  ##  ##  ##  |
+ | Boltzmannstr. 3                                 ##  ##  ##  ##  ##  |
+ | 85748 Garching bei Muenchen                     ##  ##  ##  ##  ##  |
+ | Germany                                         ##  ######  ##  ##  |
+ +=====================================================================+-->
+
+<!--
+  $Id$
+  @version $Rev$
+  @ConQAT.Rating YELLOW Hash: 7599CC995BA426679E84F0BA8B3865D7
+-->
+<project name="simulink" default="test" basedir=".">
+
+	<property name="display-name" value="ConQAT.lib Simulink" />
+	<property name="version" value="2015.2" />
+	<property name="grammars.dir" value="grammars" />
+
+	<import file="${basedir}/../../infrastructure/ant/std-env-base.xml" />
+
+	<!-- === Classpath =========================================== -->
+
+	<path id="classpath">
+		<fileset dir="${lib.dir}" includes="*.jar" />
+		<pathelement location="${build.dir}" />
+	</path>
+
+	<!-- === Init =============================================== -->
+
+	<target name="init" depends="task-def-jflex, task-def-cup" />
+
+	<!-- === Generate Targets =================================================== -->
+
+	<target name="generate" depends="init, clean-generated-src" description="Generate all.">
+		<!-- Scanner generation -->
+		<jflex file="grammars/mdl.flex" destdir="${generated-src.dir}" />
+		<jflex file="grammars/targetlink_data.flex" destdir="${generated-src.dir}" />
+		
+		<!-- Parser generation -->
+		<property name="simulink.grammar.file.abs" location="grammars/mdl.cup" />
+		<property name="generated-src.dir.abs" location="${generated-src.dir}" />
+		<cup srcfile="${simulink.grammar.file.abs}" destdir="${generated-src.dir.abs}" interface="true" parser="MDLParser" symbols="SymbolConstants" />
+
+		<property name="targetlink.grammar.file.abs" location="grammars/targetlink_data.cup" />
+		<cup srcfile="${targetlink.grammar.file.abs}" destdir="${generated-src.dir.abs}" interface="true" parser="TargetlinkDataParser" symbols="SymbolConstants" />
+		
+		<!-- Clean up -->
+		<antcall target="normalize-generated-src"/>
+	</target>
+
+	<!-- === Compile Targets ============================================ -->
+
+	<target name="compile" depends="mkdirs, generate, std-env.compile" description="Compile Java sources." />
+
+	<target name="compile-tests" depends="mkdirs, generate, std-env.compile-tests" description="Compile Java sources." />
+
+	<!-- === Dist Targets =================================================== -->
+
+	<target name="sourceDistActions">
+		<copy todir="${dist.source.root.dir}/${grammars.dir}">
+			<fileset dir="${grammars.dir}" />
+		</copy>
+	</target>
+
+</project>

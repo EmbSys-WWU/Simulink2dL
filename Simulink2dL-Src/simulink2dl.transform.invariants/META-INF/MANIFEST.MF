@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Invariants
+Bundle-SymbolicName: simulink2dl.invariants
+Bundle-Version: 1.0.0.qualifier
+Automatic-Module-Name: simulink2dl.invariants
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: simulink2dl.transform;bundle-version="1.0.0",
+ simulink2dl.dlmodel;bundle-version="1.0.0",
+ simulink2dl.util;bundle-version="1.0.0"
+Export-Package: simulink2dl.invariants
+Import-Package: org.conqat.lib.commons.collections,
+ org.conqat.lib.simulink.model,
+ simulink2dl.util

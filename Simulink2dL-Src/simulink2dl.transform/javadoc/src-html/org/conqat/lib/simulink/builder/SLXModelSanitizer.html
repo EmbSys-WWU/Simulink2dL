@@ -1,0 +1,454 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*-------------------------------------------------------------------------+<a name="line.1"></a>
+<span class="sourceLineNo">002</span>|                                                                          |<a name="line.2"></a>
+<span class="sourceLineNo">003</span>| Copyright 2005-2011 the ConQAT Project                                   |<a name="line.3"></a>
+<span class="sourceLineNo">004</span>|                                                                          |<a name="line.4"></a>
+<span class="sourceLineNo">005</span>| Licensed under the Apache License, Version 2.0 (the "License");          |<a name="line.5"></a>
+<span class="sourceLineNo">006</span>| you may not use this file except in compliance with the License.         |<a name="line.6"></a>
+<span class="sourceLineNo">007</span>| You may obtain a copy of the License at                                  |<a name="line.7"></a>
+<span class="sourceLineNo">008</span>|                                                                          |<a name="line.8"></a>
+<span class="sourceLineNo">009</span>|    http://www.apache.org/licenses/LICENSE-2.0                            |<a name="line.9"></a>
+<span class="sourceLineNo">010</span>|                                                                          |<a name="line.10"></a>
+<span class="sourceLineNo">011</span>| Unless required by applicable law or agreed to in writing, software      |<a name="line.11"></a>
+<span class="sourceLineNo">012</span>| distributed under the License is distributed on an "AS IS" BASIS,        |<a name="line.12"></a>
+<span class="sourceLineNo">013</span>| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. |<a name="line.13"></a>
+<span class="sourceLineNo">014</span>| See the License for the specific language governing permissions and      |<a name="line.14"></a>
+<span class="sourceLineNo">015</span>| limitations under the License.                                           |<a name="line.15"></a>
+<span class="sourceLineNo">016</span>+-------------------------------------------------------------------------*/<a name="line.16"></a>
+<span class="sourceLineNo">017</span>package org.conqat.lib.simulink.builder;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_BLOCK_TYPE;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_CLASS_NAME;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_COMPUTED_MODEL_VERSION;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_DIMENSION;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_DST;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_DST_BLOCK;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_DST_PORT;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_ID;<a name="line.26"></a>
+<span class="sourceLineNo">027</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_LINK_NODE;<a name="line.27"></a>
+<span class="sourceLineNo">028</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_MACHINE;<a name="line.28"></a>
+<span class="sourceLineNo">029</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_NAME;<a name="line.29"></a>
+<span class="sourceLineNo">030</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_OBJECT_ID;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_PROP_NAME;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_SID;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_SLX_MODEL_NAME;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_SRC;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_SRC_BLOCK;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_SRC_PORT;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_SSID;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_TREE_NODE;<a name="line.38"></a>
+<span class="sourceLineNo">039</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_TYPE;<a name="line.39"></a>
+<span class="sourceLineNo">040</span>import static org.conqat.lib.simulink.model.SimulinkConstants.PARAM_VERSION;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>import static org.conqat.lib.simulink.model.SimulinkConstants.SECTION_BLOCK_DEFAULTS;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>import static org.conqat.lib.simulink.model.SimulinkConstants.SECTION_BRANCH;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>import static org.conqat.lib.simulink.model.SimulinkConstants.SECTION_CHART;<a name="line.43"></a>
+<span class="sourceLineNo">044</span>import static org.conqat.lib.simulink.model.SimulinkConstants.SECTION_CHILDREN;<a name="line.44"></a>
+<span class="sourceLineNo">045</span>import static org.conqat.lib.simulink.model.SimulinkConstants.SECTION_DATA;<a name="line.45"></a>
+<span class="sourceLineNo">046</span>import static org.conqat.lib.simulink.model.SimulinkConstants.SECTION_EVENT;<a name="line.46"></a>
+<span class="sourceLineNo">047</span>import static org.conqat.lib.simulink.model.SimulinkConstants.SECTION_JUNCTION;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>import static org.conqat.lib.simulink.model.SimulinkConstants.SECTION_LIBRARY;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>import static org.conqat.lib.simulink.model.SimulinkConstants.SECTION_LINE;<a name="line.49"></a>
+<span class="sourceLineNo">050</span>import static org.conqat.lib.simulink.model.SimulinkConstants.SECTION_MACHINE;<a name="line.50"></a>
+<span class="sourceLineNo">051</span>import static org.conqat.lib.simulink.model.SimulinkConstants.SECTION_MODEL;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>import static org.conqat.lib.simulink.model.SimulinkConstants.SECTION_STATE;<a name="line.52"></a>
+<span class="sourceLineNo">053</span>import static org.conqat.lib.simulink.model.SimulinkConstants.SECTION_STATEFLOW;<a name="line.53"></a>
+<span class="sourceLineNo">054</span>import static org.conqat.lib.simulink.model.SimulinkConstants.SECTION_SYSTEM;<a name="line.54"></a>
+<span class="sourceLineNo">055</span>import static org.conqat.lib.simulink.model.SimulinkConstants.SECTION_SYSTEM_DEFAULTS;<a name="line.55"></a>
+<span class="sourceLineNo">056</span>import static org.conqat.lib.simulink.model.SimulinkConstants.SECTION_TARGET;<a name="line.56"></a>
+<span class="sourceLineNo">057</span>import static org.conqat.lib.simulink.model.SimulinkConstants.SECTION_TRANSITION;<a name="line.57"></a>
+<span class="sourceLineNo">058</span>import static org.conqat.lib.simulink.model.SimulinkConstants.TYPE_ENABLE;<a name="line.58"></a>
+<span class="sourceLineNo">059</span>import static org.conqat.lib.simulink.model.SimulinkConstants.TYPE_IFACTION;<a name="line.59"></a>
+<span class="sourceLineNo">060</span>import static org.conqat.lib.simulink.model.SimulinkConstants.TYPE_RESET;<a name="line.60"></a>
+<span class="sourceLineNo">061</span>import static org.conqat.lib.simulink.model.SimulinkConstants.TYPE_STATE;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>import static org.conqat.lib.simulink.model.SimulinkConstants.TYPE_TRIGGER;<a name="line.62"></a>
+<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">064</span>import java.util.Arrays;<a name="line.64"></a>
+<span class="sourceLineNo">065</span>import java.util.HashSet;<a name="line.65"></a>
+<span class="sourceLineNo">066</span>import java.util.Map.Entry;<a name="line.66"></a>
+<span class="sourceLineNo">067</span>import java.util.Set;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>import java.util.regex.Matcher;<a name="line.68"></a>
+<span class="sourceLineNo">069</span>import java.util.regex.Pattern;<a name="line.69"></a>
+<span class="sourceLineNo">070</span><a name="line.70"></a>
+<span class="sourceLineNo">071</span>import org.conqat.lib.commons.string.StringUtils;<a name="line.71"></a>
+<span class="sourceLineNo">072</span><a name="line.72"></a>
+<span class="sourceLineNo">073</span>/**<a name="line.73"></a>
+<span class="sourceLineNo">074</span> * Helper class to sanitize a model created in the new SLX file format to match<a name="line.74"></a>
+<span class="sourceLineNo">075</span> * the MDL file format.<a name="line.75"></a>
+<span class="sourceLineNo">076</span> * <a name="line.76"></a>
+<span class="sourceLineNo">077</span> * This class performs "flattening" in some cases, i.e. removal of hierarchy.<a name="line.77"></a>
+<span class="sourceLineNo">078</span> * The parameters of the removed sections are moved to the parent sections.<a name="line.78"></a>
+<span class="sourceLineNo">079</span> */<a name="line.79"></a>
+<span class="sourceLineNo">080</span>public class SLXModelSanitizer {<a name="line.80"></a>
+<span class="sourceLineNo">081</span><a name="line.81"></a>
+<span class="sourceLineNo">082</span>        /**<a name="line.82"></a>
+<span class="sourceLineNo">083</span>         * Pattern to match block and port information.<a name="line.83"></a>
+<span class="sourceLineNo">084</span>         * &lt;ol&gt;<a name="line.84"></a>
+<span class="sourceLineNo">085</span>         * &lt;li&gt;block id&lt;/li&gt;<a name="line.85"></a>
+<span class="sourceLineNo">086</span>         * &lt;li&gt;matlab block id (only for matlab blocks)&lt;/li&gt;<a name="line.86"></a>
+<span class="sourceLineNo">087</span>         * &lt;li&gt;port type&lt;/li&gt;<a name="line.87"></a>
+<span class="sourceLineNo">088</span>         * &lt;li&gt;port id (optional in case of out, in, trigger or enable port)&lt;/li&gt;<a name="line.88"></a>
+<span class="sourceLineNo">089</span>         * &lt;ol&gt;<a name="line.89"></a>
+<span class="sourceLineNo">090</span>         */<a name="line.90"></a>
+<span class="sourceLineNo">091</span>        private static final Pattern BLOCK_PORT_PATTERN = Pattern<a name="line.91"></a>
+<span class="sourceLineNo">092</span>                        .compile("([\\d]+(?::+[\\d]+)*)#(out|in|trigger|Reset|enable|ifaction|state)(?::([\\d]+))?");<a name="line.92"></a>
+<span class="sourceLineNo">093</span><a name="line.93"></a>
+<span class="sourceLineNo">094</span>        /** Names of model subsections that should be flattened. */<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        private static final Set&lt;String&gt; FLATTENED_MODEL_SUBSECTIONS = new HashSet&lt;&gt;(<a name="line.95"></a>
+<span class="sourceLineNo">096</span>                        Arrays.asList("GraphicalInterface", "UserParameters", "ConfigManagerSettings", "EditorSettings",<a name="line.96"></a>
+<span class="sourceLineNo">097</span>                                        "SimulationSettings", "Verification", "ExternalMode", "EngineSettings", "ModelReferenceSettings",<a name="line.97"></a>
+<span class="sourceLineNo">098</span>                                        "ConfigurationSet", "ConcurrentExecutionSettings", "MaskDefaults", "MaskParameterDefaults"));<a name="line.98"></a>
+<span class="sourceLineNo">099</span><a name="line.99"></a>
+<span class="sourceLineNo">100</span>        /** Parameter names to be ignored during flattening. */<a name="line.100"></a>
+<span class="sourceLineNo">101</span>        private static final Set&lt;String&gt; FLATTENING_IGNORED_PARAMETER_NAMES = new HashSet&lt;&gt;(Arrays.asList(PARAM_PROP_NAME,<a name="line.101"></a>
+<span class="sourceLineNo">102</span>                        PARAM_OBJECT_ID, PARAM_CLASS_NAME, PARAM_TYPE, PARAM_DIMENSION, PARAM_BLOCK_TYPE, PARAM_SID));<a name="line.102"></a>
+<span class="sourceLineNo">103</span><a name="line.103"></a>
+<span class="sourceLineNo">104</span>        /** Port types of special ports. */<a name="line.104"></a>
+<span class="sourceLineNo">105</span>        private static final Set&lt;String&gt; SPECIAL_PORT_TYPES = new HashSet&lt;&gt;(<a name="line.105"></a>
+<span class="sourceLineNo">106</span>                        Arrays.asList(TYPE_TRIGGER, TYPE_ENABLE, TYPE_IFACTION, TYPE_STATE, TYPE_RESET));<a name="line.106"></a>
+<span class="sourceLineNo">107</span><a name="line.107"></a>
+<span class="sourceLineNo">108</span>        /**<a name="line.108"></a>
+<span class="sourceLineNo">109</span>         * Sanitizes the given model to conform with MDL structure. Note that the<a name="line.109"></a>
+<span class="sourceLineNo">110</span>         * section will be modified.<a name="line.110"></a>
+<span class="sourceLineNo">111</span>         */<a name="line.111"></a>
+<span class="sourceLineNo">112</span>        public static void sanitize(MutableMDLSection section) {<a name="line.112"></a>
+<span class="sourceLineNo">113</span>                section.setParameter(PARAM_NAME, StringUtils.EMPTY_STRING);<a name="line.113"></a>
+<span class="sourceLineNo">114</span><a name="line.114"></a>
+<span class="sourceLineNo">115</span>                sanitizeFirstModelSectionOfName(section, SECTION_MODEL);<a name="line.115"></a>
+<span class="sourceLineNo">116</span>                sanitizeFirstModelSectionOfName(section, SECTION_LIBRARY);<a name="line.116"></a>
+<span class="sourceLineNo">117</span><a name="line.117"></a>
+<span class="sourceLineNo">118</span>                MutableMDLSection stateflow;<a name="line.118"></a>
+<span class="sourceLineNo">119</span>                if (SECTION_STATEFLOW.equals(section.getName())) {<a name="line.119"></a>
+<span class="sourceLineNo">120</span>                        stateflow = section;<a name="line.120"></a>
+<span class="sourceLineNo">121</span>                } else {<a name="line.121"></a>
+<span class="sourceLineNo">122</span>                        stateflow = section.getFirstSubSection(SECTION_STATEFLOW);<a name="line.122"></a>
+<span class="sourceLineNo">123</span>                }<a name="line.123"></a>
+<span class="sourceLineNo">124</span>                if (stateflow != null) {<a name="line.124"></a>
+<span class="sourceLineNo">125</span>                        MutableMDLSection machine = stateflow.getFirstSubSection(SECTION_MACHINE);<a name="line.125"></a>
+<span class="sourceLineNo">126</span>                        if (machine != null) {<a name="line.126"></a>
+<span class="sourceLineNo">127</span>                                sanitizeStateflowSection(stateflow, machine);<a name="line.127"></a>
+<span class="sourceLineNo">128</span>                        }<a name="line.128"></a>
+<span class="sourceLineNo">129</span>                }<a name="line.129"></a>
+<span class="sourceLineNo">130</span>        }<a name="line.130"></a>
+<span class="sourceLineNo">131</span><a name="line.131"></a>
+<span class="sourceLineNo">132</span>        /**<a name="line.132"></a>
+<span class="sourceLineNo">133</span>         * Sanitizes the first section of given name. The section name must refer to<a name="line.133"></a>
+<span class="sourceLineNo">134</span>         * a model or a library (which is a special kind of model).<a name="line.134"></a>
+<span class="sourceLineNo">135</span>         */<a name="line.135"></a>
+<span class="sourceLineNo">136</span>        private static void sanitizeFirstModelSectionOfName(MutableMDLSection file, String sectionName) {<a name="line.136"></a>
+<span class="sourceLineNo">137</span>                MutableMDLSection model = file.getFirstSubSection(sectionName);<a name="line.137"></a>
+<span class="sourceLineNo">138</span>                if (model != null) {<a name="line.138"></a>
+<span class="sourceLineNo">139</span>                        flattenModel(model);<a name="line.139"></a>
+<span class="sourceLineNo">140</span>                        sanitizeModel(model);<a name="line.140"></a>
+<span class="sourceLineNo">141</span>                        sanitizeLines(model);<a name="line.141"></a>
+<span class="sourceLineNo">142</span>                }<a name="line.142"></a>
+<span class="sourceLineNo">143</span>        }<a name="line.143"></a>
+<span class="sourceLineNo">144</span><a name="line.144"></a>
+<span class="sourceLineNo">145</span>        /**<a name="line.145"></a>
+<span class="sourceLineNo">146</span>         * The MDL file format only supports the following four sections to<a name="line.146"></a>
+<span class="sourceLineNo">147</span>         * structure model meta information:<a name="line.147"></a>
+<span class="sourceLineNo">148</span>         * &lt;ul&gt;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>         * &lt;li&gt;BlockDefaults&lt;/li&gt;<a name="line.149"></a>
+<span class="sourceLineNo">150</span>         * &lt;li&gt;AnnotationDefaults&lt;/li&gt;<a name="line.150"></a>
+<span class="sourceLineNo">151</span>         * &lt;li&gt;LineDefaults&lt;/li&gt;<a name="line.151"></a>
+<span class="sourceLineNo">152</span>         * &lt;li&gt;BlockParameterDefaults&lt;/li&gt;<a name="line.152"></a>
+<span class="sourceLineNo">153</span>         * &lt;/ul&gt;<a name="line.153"></a>
+<span class="sourceLineNo">154</span>         * <a name="line.154"></a>
+<span class="sourceLineNo">155</span>         * The sections of the SLX file format listed in<a name="line.155"></a>
+<span class="sourceLineNo">156</span>         * {@link #FLATTENED_MODEL_SUBSECTIONS} are therefore removed and all<a name="line.156"></a>
+<span class="sourceLineNo">157</span>         * parameters added to the model section.<a name="line.157"></a>
+<span class="sourceLineNo">158</span>         */<a name="line.158"></a>
+<span class="sourceLineNo">159</span>        private static void flattenModel(MutableMDLSection model) {<a name="line.159"></a>
+<span class="sourceLineNo">160</span>                for (MutableMDLSection subSection : model.getSubSections().getValues()) {<a name="line.160"></a>
+<span class="sourceLineNo">161</span>                        if (FLATTENED_MODEL_SUBSECTIONS.contains(subSection.getName())) {<a name="line.161"></a>
+<span class="sourceLineNo">162</span>                                flattenSection(model, subSection);<a name="line.162"></a>
+<span class="sourceLineNo">163</span>                        }<a name="line.163"></a>
+<span class="sourceLineNo">164</span>                }<a name="line.164"></a>
+<span class="sourceLineNo">165</span>        }<a name="line.165"></a>
+<span class="sourceLineNo">166</span><a name="line.166"></a>
+<span class="sourceLineNo">167</span>        /**<a name="line.167"></a>
+<span class="sourceLineNo">168</span>         * Flattens the section and all subsections. Parameters are added to the<a name="line.168"></a>
+<span class="sourceLineNo">169</span>         * model and the section and all subsections deleted.<a name="line.169"></a>
+<span class="sourceLineNo">170</span>         */<a name="line.170"></a>
+<span class="sourceLineNo">171</span>        private static void flattenSection(MutableMDLSection model, MutableMDLSection section) {<a name="line.171"></a>
+<span class="sourceLineNo">172</span>                for (Entry&lt;String, String&gt; parameter : section.getParameters().entrySet()) {<a name="line.172"></a>
+<span class="sourceLineNo">173</span>                        // The following parameters must be ignored since they would<a name="line.173"></a>
+<span class="sourceLineNo">174</span>                        // conflict with the model parameters.<a name="line.174"></a>
+<span class="sourceLineNo">175</span>                        if (FLATTENING_IGNORED_PARAMETER_NAMES.contains(parameter.getKey())) {<a name="line.175"></a>
+<span class="sourceLineNo">176</span>                                continue;<a name="line.176"></a>
+<span class="sourceLineNo">177</span>                        }<a name="line.177"></a>
+<span class="sourceLineNo">178</span>                        model.getParameters().put(parameter.getKey(), parameter.getValue());<a name="line.178"></a>
+<span class="sourceLineNo">179</span>                }<a name="line.179"></a>
+<span class="sourceLineNo">180</span><a name="line.180"></a>
+<span class="sourceLineNo">181</span>                for (MutableMDLSection subSection : section.getSubSections().getValues()) {<a name="line.181"></a>
+<span class="sourceLineNo">182</span>                        flattenSection(model, subSection);<a name="line.182"></a>
+<span class="sourceLineNo">183</span>                }<a name="line.183"></a>
+<span class="sourceLineNo">184</span><a name="line.184"></a>
+<span class="sourceLineNo">185</span>                model.removeSection(section);<a name="line.185"></a>
+<span class="sourceLineNo">186</span>        }<a name="line.186"></a>
+<span class="sourceLineNo">187</span><a name="line.187"></a>
+<span class="sourceLineNo">188</span>        /**<a name="line.188"></a>
+<span class="sourceLineNo">189</span>         * Sanitizes the model:<a name="line.189"></a>
+<span class="sourceLineNo">190</span>         * &lt;ul&gt;<a name="line.190"></a>
+<span class="sourceLineNo">191</span>         * &lt;li&gt;Set the model name&lt;/li&gt;<a name="line.191"></a>
+<span class="sourceLineNo">192</span>         * &lt;li&gt;Set the model version&lt;/li&gt;<a name="line.192"></a>
+<span class="sourceLineNo">193</span>         * &lt;li&gt;Set the system name&lt;/li&gt;<a name="line.193"></a>
+<span class="sourceLineNo">194</span>         * &lt;/ul&gt;<a name="line.194"></a>
+<span class="sourceLineNo">195</span>         */<a name="line.195"></a>
+<span class="sourceLineNo">196</span>        private static void sanitizeModel(MutableMDLSection model) {<a name="line.196"></a>
+<span class="sourceLineNo">197</span>                String modelName = model.getParameter(PARAM_SLX_MODEL_NAME);<a name="line.197"></a>
+<span class="sourceLineNo">198</span>                if (modelName == null) {<a name="line.198"></a>
+<span class="sourceLineNo">199</span>                        modelName = StringUtils.EMPTY_STRING;<a name="line.199"></a>
+<span class="sourceLineNo">200</span>                }<a name="line.200"></a>
+<span class="sourceLineNo">201</span>                model.setParameter(PARAM_NAME, modelName);<a name="line.201"></a>
+<span class="sourceLineNo">202</span><a name="line.202"></a>
+<span class="sourceLineNo">203</span>                String version = model.getParameter(PARAM_COMPUTED_MODEL_VERSION);<a name="line.203"></a>
+<span class="sourceLineNo">204</span>                if (version == null) {<a name="line.204"></a>
+<span class="sourceLineNo">205</span>                        // Still unknown where the model version is stored if<a name="line.205"></a>
+<span class="sourceLineNo">206</span>                        // PARAM_ComputedModelVersion is empty.<a name="line.206"></a>
+<span class="sourceLineNo">207</span>                        version = "1.0";<a name="line.207"></a>
+<span class="sourceLineNo">208</span>                }<a name="line.208"></a>
+<span class="sourceLineNo">209</span>                model.setParameter(PARAM_VERSION, version);<a name="line.209"></a>
+<span class="sourceLineNo">210</span><a name="line.210"></a>
+<span class="sourceLineNo">211</span>                // The mdl format requires both the model and the system section to have<a name="line.211"></a>
+<span class="sourceLineNo">212</span>                // the model name.<a name="line.212"></a>
+<span class="sourceLineNo">213</span>                MutableMDLSection system = model.getFirstSubSection(SECTION_SYSTEM);<a name="line.213"></a>
+<span class="sourceLineNo">214</span>                if (system != null) {<a name="line.214"></a>
+<span class="sourceLineNo">215</span>                        system.setParameter(PARAM_NAME, modelName);<a name="line.215"></a>
+<span class="sourceLineNo">216</span>                        flattenSystemDefaults(model);<a name="line.216"></a>
+<span class="sourceLineNo">217</span>                }<a name="line.217"></a>
+<span class="sourceLineNo">218</span>        }<a name="line.218"></a>
+<span class="sourceLineNo">219</span><a name="line.219"></a>
+<span class="sourceLineNo">220</span>        /**<a name="line.220"></a>
+<span class="sourceLineNo">221</span>         * Flattens the system defaults section by adding all parameters to the<a name="line.221"></a>
+<span class="sourceLineNo">222</span>         * block defaults and removing the system defaults section from the model.<a name="line.222"></a>
+<span class="sourceLineNo">223</span>         */<a name="line.223"></a>
+<span class="sourceLineNo">224</span>        /* package */static void flattenSystemDefaults(MutableMDLSection model) {<a name="line.224"></a>
+<span class="sourceLineNo">225</span>                MutableMDLSection blockDefaults = model.getFirstSubSection(SECTION_BLOCK_DEFAULTS);<a name="line.225"></a>
+<span class="sourceLineNo">226</span>                MutableMDLSection systemDefaults = model.getFirstSubSection(SECTION_SYSTEM_DEFAULTS);<a name="line.226"></a>
+<span class="sourceLineNo">227</span><a name="line.227"></a>
+<span class="sourceLineNo">228</span>                if (systemDefaults != null) {<a name="line.228"></a>
+<span class="sourceLineNo">229</span>                        // Create empty block defaults if the section does not exist yet.<a name="line.229"></a>
+<span class="sourceLineNo">230</span>                        if (blockDefaults == null) {<a name="line.230"></a>
+<span class="sourceLineNo">231</span>                                blockDefaults = new MutableMDLSection(SECTION_BLOCK_DEFAULTS, -1);<a name="line.231"></a>
+<span class="sourceLineNo">232</span>                                model.addSubSection(blockDefaults);<a name="line.232"></a>
+<span class="sourceLineNo">233</span>                        }<a name="line.233"></a>
+<span class="sourceLineNo">234</span><a name="line.234"></a>
+<span class="sourceLineNo">235</span>                        for (Entry&lt;String, String&gt; parameter : systemDefaults.getParameters().entrySet()) {<a name="line.235"></a>
+<span class="sourceLineNo">236</span>                                String key = SECTION_SYSTEM + "." + parameter.getKey();<a name="line.236"></a>
+<span class="sourceLineNo">237</span>                                blockDefaults.setParameter(key, parameter.getValue());<a name="line.237"></a>
+<span class="sourceLineNo">238</span>                        }<a name="line.238"></a>
+<span class="sourceLineNo">239</span><a name="line.239"></a>
+<span class="sourceLineNo">240</span>                        model.removeSection(systemDefaults);<a name="line.240"></a>
+<span class="sourceLineNo">241</span>                }<a name="line.241"></a>
+<span class="sourceLineNo">242</span>        }<a name="line.242"></a>
+<span class="sourceLineNo">243</span><a name="line.243"></a>
+<span class="sourceLineNo">244</span>        /** Sanitize lines and branches recursively. */<a name="line.244"></a>
+<span class="sourceLineNo">245</span>        private static void sanitizeLines(MutableMDLSection container) {<a name="line.245"></a>
+<span class="sourceLineNo">246</span>                for (MutableMDLSection subSection : container.getSubSections().getValues()) {<a name="line.246"></a>
+<span class="sourceLineNo">247</span>                        String name = subSection.getName();<a name="line.247"></a>
+<span class="sourceLineNo">248</span>                        if (SECTION_LINE.equals(name) || SECTION_BRANCH.equals(name)) {<a name="line.248"></a>
+<span class="sourceLineNo">249</span>                                sanitizeLine(subSection);<a name="line.249"></a>
+<span class="sourceLineNo">250</span>                        }<a name="line.250"></a>
+<span class="sourceLineNo">251</span>                        sanitizeLines(subSection);<a name="line.251"></a>
+<span class="sourceLineNo">252</span>                }<a name="line.252"></a>
+<span class="sourceLineNo">253</span>        }<a name="line.253"></a>
+<span class="sourceLineNo">254</span><a name="line.254"></a>
+<span class="sourceLineNo">255</span>        /**<a name="line.255"></a>
+<span class="sourceLineNo">256</span>         * Sanitizes a single line by extracting SrcBlock and SrcPort from Src<a name="line.256"></a>
+<span class="sourceLineNo">257</span>         * parameter respectively DstBlock and DstPort from Dst parameter.<a name="line.257"></a>
+<span class="sourceLineNo">258</span>         */<a name="line.258"></a>
+<span class="sourceLineNo">259</span>        /* package */static void sanitizeLine(MutableMDLSection lineOrBranch) {<a name="line.259"></a>
+<span class="sourceLineNo">260</span>                sanitizeLineSrcOrDst(lineOrBranch, PARAM_SRC, PARAM_SRC_PORT, PARAM_SRC_BLOCK);<a name="line.260"></a>
+<span class="sourceLineNo">261</span>                sanitizeLineSrcOrDst(lineOrBranch, PARAM_DST, PARAM_DST_PORT, PARAM_DST_BLOCK);<a name="line.261"></a>
+<span class="sourceLineNo">262</span>        }<a name="line.262"></a>
+<span class="sourceLineNo">263</span><a name="line.263"></a>
+<span class="sourceLineNo">264</span>        /** Sanitizes the Src or Dst part of a line. */<a name="line.264"></a>
+<span class="sourceLineNo">265</span>        private static void sanitizeLineSrcOrDst(MutableMDLSection lineOrBranch, String srcOrDstParameter,<a name="line.265"></a>
+<span class="sourceLineNo">266</span>                        String srcOrDstPortParameter, String srcOrDstBlockParameter) {<a name="line.266"></a>
+<span class="sourceLineNo">267</span>                String value = lineOrBranch.getParameter(srcOrDstParameter);<a name="line.267"></a>
+<span class="sourceLineNo">268</span>                if (value == null) {<a name="line.268"></a>
+<span class="sourceLineNo">269</span>                        return;<a name="line.269"></a>
+<span class="sourceLineNo">270</span>                }<a name="line.270"></a>
+<span class="sourceLineNo">271</span><a name="line.271"></a>
+<span class="sourceLineNo">272</span>                Matcher matcher = BLOCK_PORT_PATTERN.matcher(value);<a name="line.272"></a>
+<span class="sourceLineNo">273</span>                if (!matcher.matches()) {<a name="line.273"></a>
+<span class="sourceLineNo">274</span>                        return;<a name="line.274"></a>
+<span class="sourceLineNo">275</span>                }<a name="line.275"></a>
+<span class="sourceLineNo">276</span><a name="line.276"></a>
+<span class="sourceLineNo">277</span>                String blockSID = matcher.group(1);<a name="line.277"></a>
+<span class="sourceLineNo">278</span>                String portId = matcher.group(3);<a name="line.278"></a>
+<span class="sourceLineNo">279</span><a name="line.279"></a>
+<span class="sourceLineNo">280</span>                String portType = matcher.group(2);<a name="line.280"></a>
+<span class="sourceLineNo">281</span>                // In case of special ports the textual type is used.<a name="line.281"></a>
+<span class="sourceLineNo">282</span>                if (SPECIAL_PORT_TYPES.contains(portType)) {<a name="line.282"></a>
+<span class="sourceLineNo">283</span>                        portId = portType;<a name="line.283"></a>
+<span class="sourceLineNo">284</span>                }<a name="line.284"></a>
+<span class="sourceLineNo">285</span><a name="line.285"></a>
+<span class="sourceLineNo">286</span>                lineOrBranch.setParameter(srcOrDstBlockParameter, blockSID);<a name="line.286"></a>
+<span class="sourceLineNo">287</span>                lineOrBranch.setParameter(srcOrDstPortParameter, portId);<a name="line.287"></a>
+<span class="sourceLineNo">288</span>                lineOrBranch.removeParameter(srcOrDstParameter);<a name="line.288"></a>
+<span class="sourceLineNo">289</span>        }<a name="line.289"></a>
+<span class="sourceLineNo">290</span><a name="line.290"></a>
+<span class="sourceLineNo">291</span>        /** Recursively sanitize state flow element. */<a name="line.291"></a>
+<span class="sourceLineNo">292</span>        private static void sanitizeStateflowSection(MutableMDLSection stateflowModel, MutableMDLSection section) {<a name="line.292"></a>
+<span class="sourceLineNo">293</span>                for (MutableMDLSection subSection : section.getSubSections().getValues()) {<a name="line.293"></a>
+<span class="sourceLineNo">294</span>                        String name = subSection.getName();<a name="line.294"></a>
+<span class="sourceLineNo">295</span>                        if (SECTION_CHILDREN.equals(name)) {<a name="line.295"></a>
+<span class="sourceLineNo">296</span>                                sanitizeStateflowSection(stateflowModel, subSection);<a name="line.296"></a>
+<span class="sourceLineNo">297</span>                                section.removeSection(subSection);<a name="line.297"></a>
+<span class="sourceLineNo">298</span>                        } else {<a name="line.298"></a>
+<span class="sourceLineNo">299</span>                                sanitizeId(subSection);<a name="line.299"></a>
+<span class="sourceLineNo">300</span>                                if (SECTION_STATE.equals(name)) {<a name="line.300"></a>
+<span class="sourceLineNo">301</span>                                        buildTreeNode(section, subSection);<a name="line.301"></a>
+<span class="sourceLineNo">302</span>                                        sanitizeStateflowSection(stateflowModel, subSection);<a name="line.302"></a>
+<span class="sourceLineNo">303</span>                                        flattenStateflowSection(stateflowModel, subSection);<a name="line.303"></a>
+<span class="sourceLineNo">304</span>                                } else if (SECTION_CHART.equals(name)) {<a name="line.304"></a>
+<span class="sourceLineNo">305</span>                                        buildMachineId(section, subSection);<a name="line.305"></a>
+<span class="sourceLineNo">306</span>                                        sanitizeStateflowSection(stateflowModel, subSection);<a name="line.306"></a>
+<span class="sourceLineNo">307</span>                                        flattenStateflowSection(stateflowModel, subSection);<a name="line.307"></a>
+<span class="sourceLineNo">308</span>                                } else if (SECTION_DATA.equals(name) || SECTION_TRANSITION.equals(name) || SECTION_JUNCTION.equals(name)<a name="line.308"></a>
+<span class="sourceLineNo">309</span>                                                || SECTION_TARGET.equals(name) || SECTION_EVENT.equals(name)) {<a name="line.309"></a>
+<span class="sourceLineNo">310</span>                                        buildLinkNode(section, subSection);<a name="line.310"></a>
+<span class="sourceLineNo">311</span>                                        sanitizeStateflowSection(stateflowModel, subSection);<a name="line.311"></a>
+<span class="sourceLineNo">312</span>                                        flattenStateflowSection(stateflowModel, subSection);<a name="line.312"></a>
+<span class="sourceLineNo">313</span>                                }<a name="line.313"></a>
+<span class="sourceLineNo">314</span>                                // Only the preceding elements are flattened. Other<a name="line.314"></a>
+<span class="sourceLineNo">315</span>                                // stateflow elements remain in their parent section.<a name="line.315"></a>
+<span class="sourceLineNo">316</span>                        }<a name="line.316"></a>
+<span class="sourceLineNo">317</span>                }<a name="line.317"></a>
+<span class="sourceLineNo">318</span>        }<a name="line.318"></a>
+<span class="sourceLineNo">319</span><a name="line.319"></a>
+<span class="sourceLineNo">320</span>        /** Sanitizes the section's id by converting ssid to id. */<a name="line.320"></a>
+<span class="sourceLineNo">321</span>        private static void sanitizeId(MutableMDLSection section) {<a name="line.321"></a>
+<span class="sourceLineNo">322</span>                String ssid = section.getParameter(PARAM_SSID);<a name="line.322"></a>
+<span class="sourceLineNo">323</span>                if (ssid != null) {<a name="line.323"></a>
+<span class="sourceLineNo">324</span>                        // prefix with chart id, as ids are only unique within charts in SLX<a name="line.324"></a>
+<span class="sourceLineNo">325</span>                        MutableMDLSection parentChart = findParentChartSection(section);<a name="line.325"></a>
+<span class="sourceLineNo">326</span>                        if (parentChart != null) {<a name="line.326"></a>
+<span class="sourceLineNo">327</span>                                ssid = parentChart.getParameter(PARAM_ID) + ":" + ssid;<a name="line.327"></a>
+<span class="sourceLineNo">328</span>                        }<a name="line.328"></a>
+<span class="sourceLineNo">329</span><a name="line.329"></a>
+<span class="sourceLineNo">330</span>                        section.setParameter(PARAM_ID, ssid);<a name="line.330"></a>
+<span class="sourceLineNo">331</span>                        section.removeParameter(PARAM_SSID);<a name="line.331"></a>
+<span class="sourceLineNo">332</span>                }<a name="line.332"></a>
+<span class="sourceLineNo">333</span>        }<a name="line.333"></a>
+<span class="sourceLineNo">334</span><a name="line.334"></a>
+<span class="sourceLineNo">335</span>        /** Returns the surrounding parent chart section (or null). */<a name="line.335"></a>
+<span class="sourceLineNo">336</span>        private static MutableMDLSection findParentChartSection(MutableMDLSection section) {<a name="line.336"></a>
+<span class="sourceLineNo">337</span>                MutableMDLSection parent = section.getParentSection();<a name="line.337"></a>
+<span class="sourceLineNo">338</span>                while (parent != null) {<a name="line.338"></a>
+<span class="sourceLineNo">339</span>                        if (parent.getName().equals(SECTION_CHART)) {<a name="line.339"></a>
+<span class="sourceLineNo">340</span>                                return parent;<a name="line.340"></a>
+<span class="sourceLineNo">341</span>                        }<a name="line.341"></a>
+<span class="sourceLineNo">342</span>                        parent = parent.getParentSection();<a name="line.342"></a>
+<span class="sourceLineNo">343</span>                }<a name="line.343"></a>
+<span class="sourceLineNo">344</span>                return null;<a name="line.344"></a>
+<span class="sourceLineNo">345</span>        }<a name="line.345"></a>
+<span class="sourceLineNo">346</span><a name="line.346"></a>
+<span class="sourceLineNo">347</span>        /** Create treeNode parameter, which indicates the state's parent. */<a name="line.347"></a>
+<span class="sourceLineNo">348</span>        private static void buildTreeNode(MutableMDLSection section, MutableMDLSection subSection) {<a name="line.348"></a>
+<span class="sourceLineNo">349</span>                MutableMDLSection parent = section.getParentSection();<a name="line.349"></a>
+<span class="sourceLineNo">350</span>                String parentId = parent.getParameter(PARAM_ID);<a name="line.350"></a>
+<span class="sourceLineNo">351</span>                if (parentId != null) {<a name="line.351"></a>
+<span class="sourceLineNo">352</span>                        subSection.setParameter(PARAM_TREE_NODE, "[" + parentId + "]");<a name="line.352"></a>
+<span class="sourceLineNo">353</span>                }<a name="line.353"></a>
+<span class="sourceLineNo">354</span>        }<a name="line.354"></a>
+<span class="sourceLineNo">355</span><a name="line.355"></a>
+<span class="sourceLineNo">356</span>        /** Create machineId parameter, which indicates the chart's parent. */<a name="line.356"></a>
+<span class="sourceLineNo">357</span>        private static void buildMachineId(MutableMDLSection section, MutableMDLSection subSection) {<a name="line.357"></a>
+<span class="sourceLineNo">358</span>                MutableMDLSection parent = section.getParentSection();<a name="line.358"></a>
+<span class="sourceLineNo">359</span>                String parentId = parent.getParameter(PARAM_ID);<a name="line.359"></a>
+<span class="sourceLineNo">360</span>                if (parentId != null) {<a name="line.360"></a>
+<span class="sourceLineNo">361</span>                        subSection.setParameter(PARAM_MACHINE, parentId);<a name="line.361"></a>
+<span class="sourceLineNo">362</span>                }<a name="line.362"></a>
+<span class="sourceLineNo">363</span>        }<a name="line.363"></a>
+<span class="sourceLineNo">364</span><a name="line.364"></a>
+<span class="sourceLineNo">365</span>        /** Create linkNode parameter, which indicates the sf element's parent. */<a name="line.365"></a>
+<span class="sourceLineNo">366</span>        private static void buildLinkNode(MutableMDLSection section, MutableMDLSection subSection) {<a name="line.366"></a>
+<span class="sourceLineNo">367</span>                MutableMDLSection parent = section.getParentSection();<a name="line.367"></a>
+<span class="sourceLineNo">368</span>                String parentId = parent.getParameter(PARAM_ID);<a name="line.368"></a>
+<span class="sourceLineNo">369</span>                if (parentId != null) {<a name="line.369"></a>
+<span class="sourceLineNo">370</span>                        subSection.setParameter(PARAM_LINK_NODE, "[" + parentId + "]");<a name="line.370"></a>
+<span class="sourceLineNo">371</span>                }<a name="line.371"></a>
+<span class="sourceLineNo">372</span>        }<a name="line.372"></a>
+<span class="sourceLineNo">373</span><a name="line.373"></a>
+<span class="sourceLineNo">374</span>        /** Moves a section from its parent to the stateflow root. */<a name="line.374"></a>
+<span class="sourceLineNo">375</span>        private static void flattenStateflowSection(MutableMDLSection stateflowModel, MutableMDLSection section) {<a name="line.375"></a>
+<span class="sourceLineNo">376</span>                MutableMDLSection parent = section.getParentSection();<a name="line.376"></a>
+<span class="sourceLineNo">377</span>                if (parent != null) {<a name="line.377"></a>
+<span class="sourceLineNo">378</span>                        parent.removeSection(section);<a name="line.378"></a>
+<span class="sourceLineNo">379</span>                }<a name="line.379"></a>
+<span class="sourceLineNo">380</span>                stateflowModel.addSubSection(section);<a name="line.380"></a>
+<span class="sourceLineNo">381</span>        }<a name="line.381"></a>
+<span class="sourceLineNo">382</span>}<a name="line.382"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

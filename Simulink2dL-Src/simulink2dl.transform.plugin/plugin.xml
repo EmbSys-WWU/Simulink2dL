@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="simulink2dl.transform.plugin.transformactionset"
+            label="Transform"
+            visible="true">
+         <action
+               class="simulink2dl.transform.plugin.TransformAction"
+               id="simulink2dl.transform.plugin.transformaction"
+               label="Transform"
+               mode="FORCE_TEXT"
+               style="push"
+               toolbarPath="&quot;Normal/additions&quot;">
+         </action>
+      </actionSet>
+   </extension>
+
+</plugin>

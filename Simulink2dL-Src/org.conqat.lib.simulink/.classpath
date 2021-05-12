@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test-src"/>
+	<classpathentry kind="src" path="generated-src">
+		<attributes>
+			<attribute name="ignore_optional_problems" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="external/commons-src"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/junit-jupiter-engine-5.1.0.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-engine/5.1.0/6ee32e577850a9004e80a5685ff1afe5af781837/junit-jupiter-engine-5.1.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\org.junit.jupiter\junit-jupiter-engine\5.1.0\be575ea16f5f3d675a8bccda48c9fb54cc8741df\junit-jupiter-engine-5.1.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/junit-vintage-engine-5.1.0.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/org.junit.vintage/junit-vintage-engine/5.1.0/1bd82091a59d14723e7211e43128d97339dfcec/junit-vintage-engine-5.1.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\org.junit.vintage\junit-vintage-engine\5.1.0\cc02fecfc4d90f4fb8c223f5dddd82b083ad6035\junit-vintage-engine-5.1.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/junit-4.12.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/junit/junit/4.12/a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa/junit-4.12-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\junit\junit\4.12\941a8be4506c65f0a9001c08812fb7da1e505e21\junit-4.12-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/junit-jupiter-params-5.1.0.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-params/5.1.0/ec235300af48b07832e5efa2ce2e571f747fb8ca/junit-jupiter-params-5.1.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\org.junit.jupiter\junit-jupiter-params\5.1.0\82556e303328c65c8ed2488fa19c2445c0f4cd73\junit-jupiter-params-5.1.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/junit-jupiter-api-5.1.0.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-api/5.1.0/d4b2cf00c46ec46c2d59a3ab571a00b742dda0b0/junit-jupiter-api-5.1.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\org.junit.jupiter\junit-jupiter-api\5.1.0\8a4811d4a53916d32a8f5a331ebb760cbd2cae6e\junit-jupiter-api-5.1.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/hamcrest-library-1.3.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-library/1.3/47a7ee46628ab7133129cd7cef1e92657bc275e/hamcrest-library-1.3-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\org.hamcrest\hamcrest-library\1.3\4324046c5f99f3dc91b5370899fa3ae65fd137d2\hamcrest-library-1.3-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/assertj-core-3.8.0.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/org.assertj/assertj-core/3.8.0/85dab3e124fb391b10196df9bfdb43640deabb09/assertj-core-3.8.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\org.assertj\assertj-core\3.8.0\a2958ce39a3fd0ccdb52502e3a839edec50b6a98\assertj-core-3.8.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/equalsverifier-2.4.3.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/nl.jqno.equalsverifier/equalsverifier/2.4.3/c78f0cddc00928b9244fd60e8fc47e8f4b03e4f6/equalsverifier-2.4.3-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\nl.jqno.equalsverifier\equalsverifier\2.4.3\c2e365940fe8d539dabbccfa4396801116eb26cc\equalsverifier-2.4.3-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/mockito-core-2.8.47.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-core/2.8.47/95325a034a187d7964cff5dfc90cef6c363c265e/mockito-core-2.8.47-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\org.mockito\mockito-core\2.8.47\c8dabf459eab9863eb9706ae93fca0258550bb7\mockito-core-2.8.47-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/junit-platform-launcher-1.1.0.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-launcher/1.1.0/e2ebb954d6c1ea5cda1d2d09bb5f645e8e219f94/junit-platform-launcher-1.1.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\org.junit.platform\junit-platform-launcher\1.1.0\e5821d55dd59476ab4c10d59d68e4874356c4797\junit-platform-launcher-1.1.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/cup-runtime.jar"/>
+	<classpathentry kind="lib" path="lib/jmatio.jar"/>
+	<classpathentry kind="lib" path="lib/mockito-all-1.9.5.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-all/1.9.5/b8086d4e4daa361fc746abea62f77a2ae55d3ed9/mockito-all-1.9.5-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\org.mockito\mockito-all\1.9.5\982f4a74cbff61f56c0868b2fdf71fe63b646794\mockito-all-1.9.5-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/junit-platform-engine-1.1.0.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-engine/1.1.0/ec15fab8c638286957da5f1916088c8031c19a2/junit-platform-engine-1.1.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\org.junit.platform\junit-platform-engine\1.1.0\2c80dceae2027cfcc1f89b5a6f01eb415eaa0ab9\junit-platform-engine-1.1.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/junit-platform-commons-1.1.0.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-commons/1.1.0/39d7c2eec7178ba6e53445a2851e66a966a7472f/junit-platform-commons-1.1.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\org.junit.platform\junit-platform-commons\1.1.0\61676aab12f79b5c087fcbc438bcad5e174613d2\junit-platform-commons-1.1.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/apiguardian-api-1.0.0.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/org.apiguardian/apiguardian-api/1.0.0/777508fa9f3e03cafb3c1fb2eba3dca317f4b1ee/apiguardian-api-1.0.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\org.apiguardian\apiguardian-api\1.0.0\c00d4b62d6f43f718cedf8e3fd9594faf97d922e\apiguardian-api-1.0.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/hamcrest-core-1.3.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b/hamcrest-core-1.3-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\org.hamcrest\hamcrest-core\1.3\ad09811315f1d4f5756986575b0ea16b99cd686f\hamcrest-core-1.3-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/opentest4j-1.0.0.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/org.opentest4j/opentest4j/1.0.0/a67ba0f50d97fa616f2470c5a48eb7f9eb38391c/opentest4j-1.0.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\org.opentest4j\opentest4j\1.0.0\498252b12d221e6a2c903701810fadcbea865726\opentest4j-1.0.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/byte-buddy-1.6.14.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy/1.6.14/59f185ca98044661e587f1685c59dae22a49e1cc/byte-buddy-1.6.14-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy\1.6.14\fc8ead48008a3e7dc69d60f7ec516fa50c751724\byte-buddy-1.6.14-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/byte-buddy-agent-1.6.14.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.6.14/75649a0d922bc4efb65bd60a734ee38b64d54231/byte-buddy-agent-1.6.14-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.6.14\f736d5ec4f32829a6b5a6b3ac77ae0013dccf7c0\byte-buddy-agent-1.6.14-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/objenesis-2.5.jar" sourcepath="C:/Users/Khater/.gradle/caches/modules-2/files-2.1/org.objenesis/objenesis/2.5/e2b450699731118d1498645e36577371afced20f/objenesis-2.5-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:C:\Users\Khater\.gradle\caches\modules-2\files-2.1\org.objenesis\objenesis\2.5\c432deafe7185b31b8d371b9062b7fa9dc8d48aa\objenesis-2.5-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

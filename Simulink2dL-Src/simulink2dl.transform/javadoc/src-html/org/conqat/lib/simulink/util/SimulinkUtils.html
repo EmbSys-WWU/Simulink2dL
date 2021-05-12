@@ -1,0 +1,830 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*-------------------------------------------------------------------------+<a name="line.1"></a>
+<span class="sourceLineNo">002</span>|                                                                          |<a name="line.2"></a>
+<span class="sourceLineNo">003</span>| Copyright 2005-2011 The ConQAT Project                                   |<a name="line.3"></a>
+<span class="sourceLineNo">004</span>|                                                                          |<a name="line.4"></a>
+<span class="sourceLineNo">005</span>| Licensed under the Apache License, Version 2.0 (the "License");          |<a name="line.5"></a>
+<span class="sourceLineNo">006</span>| you may not use this file except in compliance with the License.         |<a name="line.6"></a>
+<span class="sourceLineNo">007</span>| You may obtain a copy of the License at                                  |<a name="line.7"></a>
+<span class="sourceLineNo">008</span>|                                                                          |<a name="line.8"></a>
+<span class="sourceLineNo">009</span>|    http://www.apache.org/licenses/LICENSE-2.0                            |<a name="line.9"></a>
+<span class="sourceLineNo">010</span>|                                                                          |<a name="line.10"></a>
+<span class="sourceLineNo">011</span>| Unless required by applicable law or agreed to in writing, software      |<a name="line.11"></a>
+<span class="sourceLineNo">012</span>| distributed under the License is distributed on an "AS IS" BASIS,        |<a name="line.12"></a>
+<span class="sourceLineNo">013</span>| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. |<a name="line.13"></a>
+<span class="sourceLineNo">014</span>| See the License for the specific language governing permissions and      |<a name="line.14"></a>
+<span class="sourceLineNo">015</span>| limitations under the License.                                           |<a name="line.15"></a>
+<span class="sourceLineNo">016</span>+-------------------------------------------------------------------------*/<a name="line.16"></a>
+<span class="sourceLineNo">017</span>package org.conqat.lib.simulink.util;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>import java.io.PrintStream;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import java.util.ArrayList;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import java.util.Collection;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>import java.util.Collections;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>import java.util.Comparator;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import java.util.HashMap;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import java.util.HashSet;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>import java.util.Iterator;<a name="line.26"></a>
+<span class="sourceLineNo">027</span>import java.util.List;<a name="line.27"></a>
+<span class="sourceLineNo">028</span>import java.util.Map;<a name="line.28"></a>
+<span class="sourceLineNo">029</span>import java.util.Set;<a name="line.29"></a>
+<span class="sourceLineNo">030</span>import java.util.regex.Matcher;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>import java.util.regex.Pattern;<a name="line.31"></a>
+<span class="sourceLineNo">032</span><a name="line.32"></a>
+<span class="sourceLineNo">033</span>import org.conqat.lib.commons.assertion.CCSMAssert;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import org.conqat.lib.commons.collections.CollectionUtils;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import org.conqat.lib.commons.collections.IdentityHashSet;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import org.conqat.lib.commons.collections.UnmodifiableSet;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>import org.conqat.lib.commons.error.NeverThrownRuntimeException;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>import org.conqat.lib.commons.string.StringUtils;<a name="line.38"></a>
+<span class="sourceLineNo">039</span>import org.conqat.lib.commons.visitor.IVisitor;<a name="line.39"></a>
+<span class="sourceLineNo">040</span>import org.conqat.lib.simulink.model.ParameterizedElement;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>import org.conqat.lib.simulink.model.SimulinkBlock;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>import org.conqat.lib.simulink.model.SimulinkConstants;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>import org.conqat.lib.simulink.model.SimulinkElementBase;<a name="line.43"></a>
+<span class="sourceLineNo">044</span>import org.conqat.lib.simulink.model.SimulinkInPort;<a name="line.44"></a>
+<span class="sourceLineNo">045</span>import org.conqat.lib.simulink.model.SimulinkLine;<a name="line.45"></a>
+<span class="sourceLineNo">046</span>import org.conqat.lib.simulink.model.SimulinkModel;<a name="line.46"></a>
+<span class="sourceLineNo">047</span>import org.conqat.lib.simulink.model.SimulinkObject;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>import org.conqat.lib.simulink.model.SimulinkOutPort;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>import org.conqat.lib.simulink.model.SimulinkPortBase;<a name="line.49"></a>
+<span class="sourceLineNo">050</span>import org.conqat.lib.simulink.model.stateflow.IStateflowElement;<a name="line.50"></a>
+<span class="sourceLineNo">051</span>import org.conqat.lib.simulink.model.stateflow.IStateflowNodeContainer;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>import org.conqat.lib.simulink.model.stateflow.StateflowBlock;<a name="line.52"></a>
+<span class="sourceLineNo">053</span>import org.conqat.lib.simulink.model.stateflow.StateflowChart;<a name="line.53"></a>
+<span class="sourceLineNo">054</span>import org.conqat.lib.simulink.model.stateflow.StateflowElementBase;<a name="line.54"></a>
+<span class="sourceLineNo">055</span>import org.conqat.lib.simulink.model.stateflow.StateflowMachine;<a name="line.55"></a>
+<span class="sourceLineNo">056</span>import org.conqat.lib.simulink.model.stateflow.StateflowNodeBase;<a name="line.56"></a>
+<span class="sourceLineNo">057</span>import org.conqat.lib.simulink.model.stateflow.StateflowState;<a name="line.57"></a>
+<span class="sourceLineNo">058</span>import org.conqat.lib.simulink.model.stateflow.StateflowTarget;<a name="line.58"></a>
+<span class="sourceLineNo">059</span>import org.conqat.lib.simulink.model.stateflow.StateflowTransition;<a name="line.59"></a>
+<span class="sourceLineNo">060</span>import org.conqat.lib.simulink.model.stateflow.StateflowTruthTable;<a name="line.60"></a>
+<span class="sourceLineNo">061</span><a name="line.61"></a>
+<span class="sourceLineNo">062</span>/**<a name="line.62"></a>
+<span class="sourceLineNo">063</span> * Collection of utility methods for Simulink models.<a name="line.63"></a>
+<span class="sourceLineNo">064</span> */<a name="line.64"></a>
+<span class="sourceLineNo">065</span>public class SimulinkUtils {<a name="line.65"></a>
+<span class="sourceLineNo">066</span><a name="line.66"></a>
+<span class="sourceLineNo">067</span>        /** Separator used in Simulink ids. */<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        public static final String SIMULINK_ID_SEPARATOR = "/";<a name="line.68"></a>
+<span class="sourceLineNo">069</span><a name="line.69"></a>
+<span class="sourceLineNo">070</span>        /** Prefix of targetlink blocks. */<a name="line.70"></a>
+<span class="sourceLineNo">071</span>        private static final String TARGETLINK_BLOCK_PREFIX = "TL_";<a name="line.71"></a>
+<span class="sourceLineNo">072</span><a name="line.72"></a>
+<span class="sourceLineNo">073</span>        /**<a name="line.73"></a>
+<span class="sourceLineNo">074</span>         * Pattern used for splitting Simulink ids. This is required, as a double<a name="line.74"></a>
+<span class="sourceLineNo">075</span>         * slash is not separator, but an escape. Note that Simulink names cannot<a name="line.75"></a>
+<span class="sourceLineNo">076</span>         * start or end with a slash. Also see {@link #SIMULINK_ID_SEPARATOR}.<a name="line.76"></a>
+<span class="sourceLineNo">077</span>         */<a name="line.77"></a>
+<span class="sourceLineNo">078</span>        private static final Pattern SIMULINK_ID_SPLIT_PATTERN = Pattern.compile("[^/]/[^/]");<a name="line.78"></a>
+<span class="sourceLineNo">079</span><a name="line.79"></a>
+<span class="sourceLineNo">080</span>        /** Copy parameters from one parameterized element to another. */<a name="line.80"></a>
+<span class="sourceLineNo">081</span>        public static void copyParameters(ParameterizedElement source, ParameterizedElement target) {<a name="line.81"></a>
+<span class="sourceLineNo">082</span>                for (String name : source.getParameterNames()) {<a name="line.82"></a>
+<span class="sourceLineNo">083</span>                        target.setParameter(name, source.getParameter(name));<a name="line.83"></a>
+<span class="sourceLineNo">084</span>                }<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        }<a name="line.85"></a>
+<span class="sourceLineNo">086</span><a name="line.86"></a>
+<span class="sourceLineNo">087</span>        /** Create map that maps from id to block. */<a name="line.87"></a>
+<span class="sourceLineNo">088</span>        public static Map&lt;String, SimulinkBlock&gt; createIdToNodeMap(SimulinkBlock block) {<a name="line.88"></a>
+<span class="sourceLineNo">089</span>                final Map&lt;String, SimulinkBlock&gt; map = new HashMap&lt;&gt;();<a name="line.89"></a>
+<span class="sourceLineNo">090</span>                visitDepthFirst(block, new IVisitor&lt;SimulinkBlock, NeverThrownRuntimeException&gt;() {<a name="line.90"></a>
+<span class="sourceLineNo">091</span>                        @Override<a name="line.91"></a>
+<span class="sourceLineNo">092</span>                        public void visit(SimulinkBlock block) {<a name="line.92"></a>
+<span class="sourceLineNo">093</span>                                map.put(block.getId(), block);<a name="line.93"></a>
+<span class="sourceLineNo">094</span>                        }<a name="line.94"></a>
+<span class="sourceLineNo">095</span>                });<a name="line.95"></a>
+<span class="sourceLineNo">096</span>                return map;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>        }<a name="line.97"></a>
+<span class="sourceLineNo">098</span><a name="line.98"></a>
+<span class="sourceLineNo">099</span>        /**<a name="line.99"></a>
+<span class="sourceLineNo">100</span>         * Builds a Simulink id from a parent and a local name (for which slashes<a name="line.100"></a>
+<span class="sourceLineNo">101</span>         * will be escaped). If the parent is null, only the local name is used.<a name="line.101"></a>
+<span class="sourceLineNo">102</span>         */<a name="line.102"></a>
+<span class="sourceLineNo">103</span>        public static String buildId(SimulinkElementBase parent, String localName) {<a name="line.103"></a>
+<span class="sourceLineNo">104</span>                if (parent != null) {<a name="line.104"></a>
+<span class="sourceLineNo">105</span>                        return parent.getId() + SIMULINK_ID_SEPARATOR + escapeSlashes(localName);<a name="line.105"></a>
+<span class="sourceLineNo">106</span>                }<a name="line.106"></a>
+<span class="sourceLineNo">107</span>                return escapeSlashes(localName);<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        }<a name="line.108"></a>
+<span class="sourceLineNo">109</span><a name="line.109"></a>
+<span class="sourceLineNo">110</span>        /** Replaces forward slashes by double forward slashes. */<a name="line.110"></a>
+<span class="sourceLineNo">111</span>        public static String escapeSlashes(String string) {<a name="line.111"></a>
+<span class="sourceLineNo">112</span>                return string.replace(SIMULINK_ID_SEPARATOR, "//");<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        }<a name="line.113"></a>
+<span class="sourceLineNo">114</span><a name="line.114"></a>
+<span class="sourceLineNo">115</span>        /**<a name="line.115"></a>
+<span class="sourceLineNo">116</span>         * Replace double forward slashes by single forward slashes. This is the<a name="line.116"></a>
+<span class="sourceLineNo">117</span>         * counterpart to {@link #escapeSlashes(String)}.<a name="line.117"></a>
+<span class="sourceLineNo">118</span>         */<a name="line.118"></a>
+<span class="sourceLineNo">119</span>        private static String removeEscapedSlashes(String name) {<a name="line.119"></a>
+<span class="sourceLineNo">120</span>                return name.replace("//", SIMULINK_ID_SEPARATOR);<a name="line.120"></a>
+<span class="sourceLineNo">121</span>        }<a name="line.121"></a>
+<span class="sourceLineNo">122</span><a name="line.122"></a>
+<span class="sourceLineNo">123</span>        /**<a name="line.123"></a>
+<span class="sourceLineNo">124</span>         * Get Simulink array parameter as array. This raises a<a name="line.124"></a>
+<span class="sourceLineNo">125</span>         * {@link NumberFormatException} if the elements of the array are not<a name="line.125"></a>
+<span class="sourceLineNo">126</span>         * integers.<a name="line.126"></a>
+<span class="sourceLineNo">127</span>         */<a name="line.127"></a>
+<span class="sourceLineNo">128</span>        public static int[] getIntParameterArray(String parameter) {<a name="line.128"></a>
+<span class="sourceLineNo">129</span>                String[] parts = getStringParameterArray(parameter);<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                int[] result = new int[parts.length];<a name="line.130"></a>
+<span class="sourceLineNo">131</span>                for (int i = 0; i &lt; result.length; i++) {<a name="line.131"></a>
+<span class="sourceLineNo">132</span>                        result[i] = Integer.parseInt(parts[i]);<a name="line.132"></a>
+<span class="sourceLineNo">133</span>                }<a name="line.133"></a>
+<span class="sourceLineNo">134</span>                return result;<a name="line.134"></a>
+<span class="sourceLineNo">135</span>        }<a name="line.135"></a>
+<span class="sourceLineNo">136</span><a name="line.136"></a>
+<span class="sourceLineNo">137</span>        /**<a name="line.137"></a>
+<span class="sourceLineNo">138</span>         * Get Simulink array parameter as array. This raises a<a name="line.138"></a>
+<span class="sourceLineNo">139</span>         * {@link NumberFormatException} if the elements of the array are not<a name="line.139"></a>
+<span class="sourceLineNo">140</span>         * doubles.<a name="line.140"></a>
+<span class="sourceLineNo">141</span>         */<a name="line.141"></a>
+<span class="sourceLineNo">142</span>        public static double[] getDoubleParameterArray(String parameter) {<a name="line.142"></a>
+<span class="sourceLineNo">143</span>                String[] parts = getStringParameterArray(parameter);<a name="line.143"></a>
+<span class="sourceLineNo">144</span>                double[] result = new double[parts.length];<a name="line.144"></a>
+<span class="sourceLineNo">145</span>                for (int i = 0; i &lt; result.length; i++) {<a name="line.145"></a>
+<span class="sourceLineNo">146</span>                        result[i] = Double.parseDouble(parts[i]);<a name="line.146"></a>
+<span class="sourceLineNo">147</span>                }<a name="line.147"></a>
+<span class="sourceLineNo">148</span>                return result;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>        }<a name="line.149"></a>
+<span class="sourceLineNo">150</span><a name="line.150"></a>
+<span class="sourceLineNo">151</span>        /** Get Simulink array parameter as array. */<a name="line.151"></a>
+<span class="sourceLineNo">152</span>        public static String[] getStringParameterArray(String parameter) {<a name="line.152"></a>
+<span class="sourceLineNo">153</span>                if (parameter == null) {<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                        return new String[0];<a name="line.154"></a>
+<span class="sourceLineNo">155</span>                }<a name="line.155"></a>
+<span class="sourceLineNo">156</span><a name="line.156"></a>
+<span class="sourceLineNo">157</span>                // remove brackets<a name="line.157"></a>
+<span class="sourceLineNo">158</span>                String content = parameter.substring(1, parameter.length() - 1);<a name="line.158"></a>
+<span class="sourceLineNo">159</span>                if (StringUtils.isEmpty(content)) {<a name="line.159"></a>
+<span class="sourceLineNo">160</span>                        return new String[0];<a name="line.160"></a>
+<span class="sourceLineNo">161</span>                }<a name="line.161"></a>
+<span class="sourceLineNo">162</span>                return content.split("[,; ] *");<a name="line.162"></a>
+<span class="sourceLineNo">163</span>        }<a name="line.163"></a>
+<span class="sourceLineNo">164</span><a name="line.164"></a>
+<span class="sourceLineNo">165</span>        /** Checks if a block is a target link block. */<a name="line.165"></a>
+<span class="sourceLineNo">166</span>        public static boolean isTargetlinkBlock(SimulinkBlock block) {<a name="line.166"></a>
+<span class="sourceLineNo">167</span>                return isTargetlinkBlockReference(block) || isTargetlinkMaskType(block) || hasTargetlinkObject(block);<a name="line.167"></a>
+<span class="sourceLineNo">168</span>        }<a name="line.168"></a>
+<span class="sourceLineNo">169</span><a name="line.169"></a>
+<span class="sourceLineNo">170</span>        /** Returns whether the given block is a reference to a Targetlink type. */<a name="line.170"></a>
+<span class="sourceLineNo">171</span>        private static boolean isTargetlinkBlockReference(SimulinkBlock block) {<a name="line.171"></a>
+<span class="sourceLineNo">172</span>                return block.getType().equals(SimulinkConstants.TYPE_REFERENCE)<a name="line.172"></a>
+<span class="sourceLineNo">173</span>                                &amp;&amp; block.getParameter(SimulinkConstants.PARAM_SOURCE_TYPE).startsWith(TARGETLINK_BLOCK_PREFIX);<a name="line.173"></a>
+<span class="sourceLineNo">174</span>        }<a name="line.174"></a>
+<span class="sourceLineNo">175</span><a name="line.175"></a>
+<span class="sourceLineNo">176</span>        /** Returns whether the mask type is set to a Targetlink type. */<a name="line.176"></a>
+<span class="sourceLineNo">177</span>        public static boolean isTargetlinkMaskType(SimulinkBlock block) {<a name="line.177"></a>
+<span class="sourceLineNo">178</span>                String maskType = block.getParameter("MaskType");<a name="line.178"></a>
+<span class="sourceLineNo">179</span>                return maskType != null &amp;&amp; maskType.startsWith(TARGETLINK_BLOCK_PREFIX);<a name="line.179"></a>
+<span class="sourceLineNo">180</span>        }<a name="line.180"></a>
+<span class="sourceLineNo">181</span><a name="line.181"></a>
+<span class="sourceLineNo">182</span>        /**<a name="line.182"></a>
+<span class="sourceLineNo">183</span>         * Returns whether this contains an object with a Targetlink type. This is<a name="line.183"></a>
+<span class="sourceLineNo">184</span>         * the new way of marking Targetlink blocks.<a name="line.184"></a>
+<span class="sourceLineNo">185</span>         */<a name="line.185"></a>
+<span class="sourceLineNo">186</span>        private static boolean hasTargetlinkObject(SimulinkBlock block) {<a name="line.186"></a>
+<span class="sourceLineNo">187</span>                SimulinkObject maskObject = findObjectByClass(block, SimulinkConstants.PARAM_SIMULINK_MASK);<a name="line.187"></a>
+<span class="sourceLineNo">188</span>                if (maskObject == null) {<a name="line.188"></a>
+<span class="sourceLineNo">189</span>                        return false;<a name="line.189"></a>
+<span class="sourceLineNo">190</span>                }<a name="line.190"></a>
+<span class="sourceLineNo">191</span><a name="line.191"></a>
+<span class="sourceLineNo">192</span>                String typeParameter = maskObject.getParameter("Type");<a name="line.192"></a>
+<span class="sourceLineNo">193</span>                return typeParameter != null &amp;&amp; typeParameter.startsWith(TARGETLINK_BLOCK_PREFIX);<a name="line.193"></a>
+<span class="sourceLineNo">194</span>        }<a name="line.194"></a>
+<span class="sourceLineNo">195</span><a name="line.195"></a>
+<span class="sourceLineNo">196</span>        /** Split full qualified identifier. */<a name="line.196"></a>
+<span class="sourceLineNo">197</span>        public static List&lt;String&gt; splitSimulinkId(String id) {<a name="line.197"></a>
+<span class="sourceLineNo">198</span>                ArrayList&lt;String&gt; result = new ArrayList&lt;String&gt;();<a name="line.198"></a>
+<span class="sourceLineNo">199</span>                Matcher matcher = SIMULINK_ID_SPLIT_PATTERN.matcher(id);<a name="line.199"></a>
+<span class="sourceLineNo">200</span><a name="line.200"></a>
+<span class="sourceLineNo">201</span>                int begin = 0;<a name="line.201"></a>
+<span class="sourceLineNo">202</span>                while (matcher.find(begin)) {<a name="line.202"></a>
+<span class="sourceLineNo">203</span>                        result.add(removeEscapedSlashes(id.substring(begin, matcher.start() + 1)));<a name="line.203"></a>
+<span class="sourceLineNo">204</span>                        // pattern is one character longer than the slash<a name="line.204"></a>
+<span class="sourceLineNo">205</span>                        begin = matcher.end() - 1;<a name="line.205"></a>
+<span class="sourceLineNo">206</span>                }<a name="line.206"></a>
+<span class="sourceLineNo">207</span>                result.add(removeEscapedSlashes(id.substring(begin)));<a name="line.207"></a>
+<span class="sourceLineNo">208</span><a name="line.208"></a>
+<span class="sourceLineNo">209</span>                return result;<a name="line.209"></a>
+<span class="sourceLineNo">210</span>        }<a name="line.210"></a>
+<span class="sourceLineNo">211</span><a name="line.211"></a>
+<span class="sourceLineNo">212</span>        /**<a name="line.212"></a>
+<span class="sourceLineNo">213</span>         * Create Simulink id from a iteration of names. This takes care of proper<a name="line.213"></a>
+<span class="sourceLineNo">214</span>         * escaping.<a name="line.214"></a>
+<span class="sourceLineNo">215</span>         *<a name="line.215"></a>
+<span class="sourceLineNo">216</span>         * @throws AssertionError<a name="line.216"></a>
+<span class="sourceLineNo">217</span>         *             if one of names starts or ends with a slash<a name="line.217"></a>
+<span class="sourceLineNo">218</span>         */<a name="line.218"></a>
+<span class="sourceLineNo">219</span>        public static String createSimulinkId(Iterable&lt;String&gt; names) {<a name="line.219"></a>
+<span class="sourceLineNo">220</span>                StringBuilder result = new StringBuilder();<a name="line.220"></a>
+<span class="sourceLineNo">221</span>                Iterator&lt;String&gt; it = names.iterator();<a name="line.221"></a>
+<span class="sourceLineNo">222</span>                while (it.hasNext()) {<a name="line.222"></a>
+<span class="sourceLineNo">223</span>                        String name = it.next();<a name="line.223"></a>
+<span class="sourceLineNo">224</span>                        CCSMAssert.isFalse(startsOrEndsWithSeparator(name), "Simulink names cannot start or end with a slash.");<a name="line.224"></a>
+<span class="sourceLineNo">225</span>                        result.append(escapeSlashes(name));<a name="line.225"></a>
+<span class="sourceLineNo">226</span>                        if (it.hasNext()) {<a name="line.226"></a>
+<span class="sourceLineNo">227</span>                                result.append("/");<a name="line.227"></a>
+<span class="sourceLineNo">228</span>                        }<a name="line.228"></a>
+<span class="sourceLineNo">229</span>                }<a name="line.229"></a>
+<span class="sourceLineNo">230</span>                return result.toString();<a name="line.230"></a>
+<span class="sourceLineNo">231</span>        }<a name="line.231"></a>
+<span class="sourceLineNo">232</span><a name="line.232"></a>
+<span class="sourceLineNo">233</span>        /**<a name="line.233"></a>
+<span class="sourceLineNo">234</span>         * Visit blocks in a depth first manner.<a name="line.234"></a>
+<span class="sourceLineNo">235</span>         *<a name="line.235"></a>
+<span class="sourceLineNo">236</span>         * @param &lt;X&gt;<a name="line.236"></a>
+<span class="sourceLineNo">237</span>         *            Type of exception thrown by the visitor.<a name="line.237"></a>
+<span class="sourceLineNo">238</span>         * @param block<a name="line.238"></a>
+<span class="sourceLineNo">239</span>         *            block to start with<a name="line.239"></a>
+<span class="sourceLineNo">240</span>         * @param visitor<a name="line.240"></a>
+<span class="sourceLineNo">241</span>         *            the visitor<a name="line.241"></a>
+<span class="sourceLineNo">242</span>         * @throws X<a name="line.242"></a>
+<span class="sourceLineNo">243</span>         *             exception thrown by the visitor.<a name="line.243"></a>
+<span class="sourceLineNo">244</span>         */<a name="line.244"></a>
+<span class="sourceLineNo">245</span>        public static &lt;X extends Exception&gt; void visitDepthFirst(SimulinkBlock block, IVisitor&lt;SimulinkBlock, X&gt; visitor)<a name="line.245"></a>
+<span class="sourceLineNo">246</span>                        throws X {<a name="line.246"></a>
+<span class="sourceLineNo">247</span>                visitor.visit(block);<a name="line.247"></a>
+<span class="sourceLineNo">248</span>                for (SimulinkBlock child : block.getSubBlocks()) {<a name="line.248"></a>
+<span class="sourceLineNo">249</span>                        visitDepthFirst(child, visitor);<a name="line.249"></a>
+<span class="sourceLineNo">250</span>                }<a name="line.250"></a>
+<span class="sourceLineNo">251</span>        }<a name="line.251"></a>
+<span class="sourceLineNo">252</span><a name="line.252"></a>
+<span class="sourceLineNo">253</span>        /** Returns all recursively reachable subblocks of the given block. */<a name="line.253"></a>
+<span class="sourceLineNo">254</span>        public static List&lt;SimulinkBlock&gt; listBlocksDepthFirst(SimulinkBlock block) {<a name="line.254"></a>
+<span class="sourceLineNo">255</span>                final List&lt;SimulinkBlock&gt; result = new ArrayList&lt;SimulinkBlock&gt;();<a name="line.255"></a>
+<span class="sourceLineNo">256</span>                SimulinkUtils.visitDepthFirst(block, new IVisitor&lt;SimulinkBlock, NeverThrownRuntimeException&gt;() {<a name="line.256"></a>
+<span class="sourceLineNo">257</span>                        @Override<a name="line.257"></a>
+<span class="sourceLineNo">258</span>                        public void visit(SimulinkBlock block) {<a name="line.258"></a>
+<span class="sourceLineNo">259</span>                                result.add(block);<a name="line.259"></a>
+<span class="sourceLineNo">260</span>                        }<a name="line.260"></a>
+<span class="sourceLineNo">261</span>                });<a name="line.261"></a>
+<span class="sourceLineNo">262</span>                return result;<a name="line.262"></a>
+<span class="sourceLineNo">263</span>        }<a name="line.263"></a>
+<span class="sourceLineNo">264</span><a name="line.264"></a>
+<span class="sourceLineNo">265</span>        /**<a name="line.265"></a>
+<span class="sourceLineNo">266</span>         * Calculate the set of all parent blocks up to the model for the given<a name="line.266"></a>
+<span class="sourceLineNo">267</span>         * blocks.<a name="line.267"></a>
+<span class="sourceLineNo">268</span>         */<a name="line.268"></a>
+<span class="sourceLineNo">269</span>        public static Set&lt;SimulinkBlock&gt; calculateParentSet(Collection&lt;SimulinkBlock&gt; blocks) {<a name="line.269"></a>
+<span class="sourceLineNo">270</span>                Set&lt;SimulinkBlock&gt; parents = new IdentityHashSet&lt;SimulinkBlock&gt;();<a name="line.270"></a>
+<span class="sourceLineNo">271</span>                for (SimulinkBlock block : blocks) {<a name="line.271"></a>
+<span class="sourceLineNo">272</span>                        SimulinkModel model = block.getModel();<a name="line.272"></a>
+<span class="sourceLineNo">273</span>                        while (block != model) {<a name="line.273"></a>
+<span class="sourceLineNo">274</span>                                parents.add(block);<a name="line.274"></a>
+<span class="sourceLineNo">275</span>                                block = block.getParent();<a name="line.275"></a>
+<span class="sourceLineNo">276</span>                        }<a name="line.276"></a>
+<span class="sourceLineNo">277</span>                }<a name="line.277"></a>
+<span class="sourceLineNo">278</span>                return parents;<a name="line.278"></a>
+<span class="sourceLineNo">279</span>        }<a name="line.279"></a>
+<span class="sourceLineNo">280</span><a name="line.280"></a>
+<span class="sourceLineNo">281</span>        /** Recursively count sub blocks. */<a name="line.281"></a>
+<span class="sourceLineNo">282</span>        public static int countSubBlocks(SimulinkBlock block) {<a name="line.282"></a>
+<span class="sourceLineNo">283</span>                BlockAndLineCounter counter = new BlockAndLineCounter();<a name="line.283"></a>
+<span class="sourceLineNo">284</span>                SimulinkUtils.visitDepthFirst(block, counter);<a name="line.284"></a>
+<span class="sourceLineNo">285</span>                // minus the root block<a name="line.285"></a>
+<span class="sourceLineNo">286</span>                return counter.blockCount - 1;<a name="line.286"></a>
+<span class="sourceLineNo">287</span>        }<a name="line.287"></a>
+<span class="sourceLineNo">288</span><a name="line.288"></a>
+<span class="sourceLineNo">289</span>        /** Recursively count lines. */<a name="line.289"></a>
+<span class="sourceLineNo">290</span>        public static int countLines(SimulinkBlock block) {<a name="line.290"></a>
+<span class="sourceLineNo">291</span>                BlockAndLineCounter counter = new BlockAndLineCounter();<a name="line.291"></a>
+<span class="sourceLineNo">292</span>                for (SimulinkBlock child : block.getSubBlocks()) {<a name="line.292"></a>
+<span class="sourceLineNo">293</span>                        SimulinkUtils.visitDepthFirst(child, counter);<a name="line.293"></a>
+<span class="sourceLineNo">294</span>                }<a name="line.294"></a>
+<span class="sourceLineNo">295</span>                return counter.lineCount;<a name="line.295"></a>
+<span class="sourceLineNo">296</span>        }<a name="line.296"></a>
+<span class="sourceLineNo">297</span><a name="line.297"></a>
+<span class="sourceLineNo">298</span>        /** Recursively count Stateflow states. */<a name="line.298"></a>
+<span class="sourceLineNo">299</span>        public static int countStates(IStateflowNodeContainer&lt;?&gt; node) {<a name="line.299"></a>
+<span class="sourceLineNo">300</span>                int count = 0;<a name="line.300"></a>
+<span class="sourceLineNo">301</span>                if (node instanceof StateflowState) {<a name="line.301"></a>
+<span class="sourceLineNo">302</span>                        count = 1;<a name="line.302"></a>
+<span class="sourceLineNo">303</span>                } else {<a name="line.303"></a>
+<span class="sourceLineNo">304</span>                        count = 0;<a name="line.304"></a>
+<span class="sourceLineNo">305</span>                }<a name="line.305"></a>
+<span class="sourceLineNo">306</span><a name="line.306"></a>
+<span class="sourceLineNo">307</span>                for (StateflowNodeBase element : node.getNodes()) {<a name="line.307"></a>
+<span class="sourceLineNo">308</span>                        if (element instanceof IStateflowNodeContainer&lt;?&gt;) {<a name="line.308"></a>
+<span class="sourceLineNo">309</span>                                count += countStates((IStateflowNodeContainer&lt;?&gt;) element);<a name="line.309"></a>
+<span class="sourceLineNo">310</span>                        }<a name="line.310"></a>
+<span class="sourceLineNo">311</span>                }<a name="line.311"></a>
+<span class="sourceLineNo">312</span>                if (node instanceof StateflowState &amp;&amp; ((StateflowState) node).isSubChart()) {<a name="line.312"></a>
+<span class="sourceLineNo">313</span>                        count += countStates(((StateflowState) node).getSubViewer());<a name="line.313"></a>
+<span class="sourceLineNo">314</span>                }<a name="line.314"></a>
+<span class="sourceLineNo">315</span><a name="line.315"></a>
+<span class="sourceLineNo">316</span>                return count;<a name="line.316"></a>
+<span class="sourceLineNo">317</span>        }<a name="line.317"></a>
+<span class="sourceLineNo">318</span><a name="line.318"></a>
+<span class="sourceLineNo">319</span>        /** Count states of all charts of the machine. */<a name="line.319"></a>
+<span class="sourceLineNo">320</span>        public static int countStates(StateflowMachine stateflowMachine) {<a name="line.320"></a>
+<span class="sourceLineNo">321</span>                int stateCount = 0;<a name="line.321"></a>
+<span class="sourceLineNo">322</span>                for (StateflowChart chart : stateflowMachine.getCharts()) {<a name="line.322"></a>
+<span class="sourceLineNo">323</span>                        stateCount += countStates(chart);<a name="line.323"></a>
+<span class="sourceLineNo">324</span>                }<a name="line.324"></a>
+<span class="sourceLineNo">325</span>                return stateCount;<a name="line.325"></a>
+<span class="sourceLineNo">326</span>        }<a name="line.326"></a>
+<span class="sourceLineNo">327</span><a name="line.327"></a>
+<span class="sourceLineNo">328</span>        /**<a name="line.328"></a>
+<span class="sourceLineNo">329</span>         * Get the Stateflow chart a Stateflow element belongs to.<a name="line.329"></a>
+<span class="sourceLineNo">330</span>         *<a name="line.330"></a>
+<span class="sourceLineNo">331</span>         * @return the Stateflow chart or &lt;code&gt;null&lt;/code&gt; if the element is<a name="line.331"></a>
+<span class="sourceLineNo">332</span>         *         unconnected or not associated with a chart, e.g.<a name="line.332"></a>
+<span class="sourceLineNo">333</span>         *         {@link StateflowTarget}.<a name="line.333"></a>
+<span class="sourceLineNo">334</span>         */<a name="line.334"></a>
+<span class="sourceLineNo">335</span>        public static StateflowChart getChart(IStateflowElement&lt;?&gt; element) {<a name="line.335"></a>
+<span class="sourceLineNo">336</span>                if (element instanceof StateflowChart) {<a name="line.336"></a>
+<span class="sourceLineNo">337</span>                        return (StateflowChart) element;<a name="line.337"></a>
+<span class="sourceLineNo">338</span>                }<a name="line.338"></a>
+<span class="sourceLineNo">339</span>                IStateflowElement&lt;?&gt; parent = element.getParent();<a name="line.339"></a>
+<span class="sourceLineNo">340</span>                if (parent == null) {<a name="line.340"></a>
+<span class="sourceLineNo">341</span>                        return null;<a name="line.341"></a>
+<span class="sourceLineNo">342</span>                }<a name="line.342"></a>
+<span class="sourceLineNo">343</span>                return getChart(parent);<a name="line.343"></a>
+<span class="sourceLineNo">344</span>        }<a name="line.344"></a>
+<span class="sourceLineNo">345</span><a name="line.345"></a>
+<span class="sourceLineNo">346</span>        /**<a name="line.346"></a>
+<span class="sourceLineNo">347</span>         * Get the Stateflow block a Stateflow element belongs to.<a name="line.347"></a>
+<span class="sourceLineNo">348</span>         *<a name="line.348"></a>
+<span class="sourceLineNo">349</span>         * @return the Stateflow block or &lt;code&gt;null&lt;/code&gt; if the element is<a name="line.349"></a>
+<span class="sourceLineNo">350</span>         *         unconnected or not associated with a chart, e.g.<a name="line.350"></a>
+<span class="sourceLineNo">351</span>         *         {@link StateflowTarget}.<a name="line.351"></a>
+<span class="sourceLineNo">352</span>         */<a name="line.352"></a>
+<span class="sourceLineNo">353</span>        public static StateflowBlock getBlock(IStateflowElement&lt;?&gt; element) {<a name="line.353"></a>
+<span class="sourceLineNo">354</span>                StateflowChart chart = getChart(element);<a name="line.354"></a>
+<span class="sourceLineNo">355</span>                if (chart == null) {<a name="line.355"></a>
+<span class="sourceLineNo">356</span>                        return null;<a name="line.356"></a>
+<span class="sourceLineNo">357</span>                }<a name="line.357"></a>
+<span class="sourceLineNo">358</span>                return chart.getStateflowBlock();<a name="line.358"></a>
+<span class="sourceLineNo">359</span>        }<a name="line.359"></a>
+<span class="sourceLineNo">360</span><a name="line.360"></a>
+<span class="sourceLineNo">361</span>        /**<a name="line.361"></a>
+<span class="sourceLineNo">362</span>         * Get name of a Stateflow state as defined in the Stateflow manual. As<a name="line.362"></a>
+<span class="sourceLineNo">363</span>         * Stateflow awkwardly stores the names as part of the label, this is put in<a name="line.363"></a>
+<span class="sourceLineNo">364</span>         * a utility methods and not directly at class {@link StateflowState}.<a name="line.364"></a>
+<span class="sourceLineNo">365</span>         */<a name="line.365"></a>
+<span class="sourceLineNo">366</span>        public static String getStateName(StateflowState state) {<a name="line.366"></a>
+<span class="sourceLineNo">367</span>                String label = state.getLabel();<a name="line.367"></a>
+<span class="sourceLineNo">368</span>                if (StringUtils.isEmpty(label)) {<a name="line.368"></a>
+<span class="sourceLineNo">369</span>                        return null;<a name="line.369"></a>
+<span class="sourceLineNo">370</span>                }<a name="line.370"></a>
+<span class="sourceLineNo">371</span>                String name = label.split("\\\\n")[0];<a name="line.371"></a>
+<span class="sourceLineNo">372</span><a name="line.372"></a>
+<span class="sourceLineNo">373</span>                // State names MAY end with a slash<a name="line.373"></a>
+<span class="sourceLineNo">374</span>                if (name.length() &gt; 1 &amp;&amp; name.endsWith("/")) {<a name="line.374"></a>
+<span class="sourceLineNo">375</span>                        name = name.substring(0, name.length() - 1);<a name="line.375"></a>
+<span class="sourceLineNo">376</span>                }<a name="line.376"></a>
+<span class="sourceLineNo">377</span>                return name;<a name="line.377"></a>
+<span class="sourceLineNo">378</span>        }<a name="line.378"></a>
+<span class="sourceLineNo">379</span><a name="line.379"></a>
+<span class="sourceLineNo">380</span>        /**<a name="line.380"></a>
+<span class="sourceLineNo">381</span>         * Get full qualified state name. This is deliberately not part of class<a name="line.381"></a>
+<span class="sourceLineNo">382</span>         * {@link StateflowState} as names of Stateflow derives names from the state<a name="line.382"></a>
+<span class="sourceLineNo">383</span>         * labels.<a name="line.383"></a>
+<span class="sourceLineNo">384</span>         */<a name="line.384"></a>
+<span class="sourceLineNo">385</span>        public static String getFQStateName(StateflowState state) {<a name="line.385"></a>
+<span class="sourceLineNo">386</span>                String name = getStateName(state);<a name="line.386"></a>
+<span class="sourceLineNo">387</span>                IStateflowNodeContainer&lt;?&gt; parent = state.getParent();<a name="line.387"></a>
+<span class="sourceLineNo">388</span>                if (parent == null) {<a name="line.388"></a>
+<span class="sourceLineNo">389</span>                        return name;<a name="line.389"></a>
+<span class="sourceLineNo">390</span>                }<a name="line.390"></a>
+<span class="sourceLineNo">391</span>                if (parent instanceof StateflowChart) {<a name="line.391"></a>
+<span class="sourceLineNo">392</span>                        StateflowChart chart = (StateflowChart) parent;<a name="line.392"></a>
+<span class="sourceLineNo">393</span>                        return chart.getStateflowBlock().getId() + "/" + name;<a name="line.393"></a>
+<span class="sourceLineNo">394</span>                }<a name="line.394"></a>
+<span class="sourceLineNo">395</span><a name="line.395"></a>
+<span class="sourceLineNo">396</span>                // Can be only a state<a name="line.396"></a>
+<span class="sourceLineNo">397</span>                return getFQStateName((StateflowState) parent) + "." + name;<a name="line.397"></a>
+<span class="sourceLineNo">398</span>        }<a name="line.398"></a>
+<span class="sourceLineNo">399</span><a name="line.399"></a>
+<span class="sourceLineNo">400</span>        /**<a name="line.400"></a>
+<span class="sourceLineNo">401</span>         * Obtain out port block that is below the a Stateflow block and describes<a name="line.401"></a>
+<span class="sourceLineNo">402</span>         * the output of a Stateflow chart.<a name="line.402"></a>
+<span class="sourceLineNo">403</span>         *<a name="line.403"></a>
+<span class="sourceLineNo">404</span>         * What Simulink displays like an atomic Stateflow chart is internally<a name="line.404"></a>
+<span class="sourceLineNo">405</span>         * represented as a Simulink sub system that itself contains multiple<a name="line.405"></a>
+<span class="sourceLineNo">406</span>         * blocks. The sub system itself has a normal inport/outport which has only<a name="line.406"></a>
+<span class="sourceLineNo">407</span>         * a number (as (almost) all ports of Simulink sub systems do). However the<a name="line.407"></a>
+<span class="sourceLineNo">408</span>         * sub system contains a block of &lt;b&gt;type&lt;/b&gt; Inport/Outport (quite<a name="line.408"></a>
+<span class="sourceLineNo">409</span>         * confusing...) and this is the one the carries the name of the Stateflow<a name="line.409"></a>
+<span class="sourceLineNo">410</span>         * output. Note that this is related to a past CR described at<a name="line.410"></a>
+<span class="sourceLineNo">411</span>         * &lt;https://bugzilla.informatik.tu-muenchen.de/show_bug.cgi?id=1502&gt;.<a name="line.411"></a>
+<span class="sourceLineNo">412</span>         *<a name="line.412"></a>
+<span class="sourceLineNo">413</span>         * The code is the following:<a name="line.413"></a>
+<span class="sourceLineNo">414</span>         * &lt;ul&gt;<a name="line.414"></a>
+<span class="sourceLineNo">415</span>         * &lt;li&gt;iterate over all child blocks of the sub system that represents the<a name="line.415"></a>
+<span class="sourceLineNo">416</span>         * Stateflow chart<a name="line.416"></a>
+<span class="sourceLineNo">417</span>         * &lt;li&gt;pick the one that is of type Inport/Outport and that has the same<a name="line.417"></a>
+<span class="sourceLineNo">418</span>         * port index as the inport/outport of the sub system (the index defines the<a name="line.418"></a>
+<span class="sourceLineNo">419</span>         * mapping between the Inport/Ouport block and the actual inport/outport)<a name="line.419"></a>
+<span class="sourceLineNo">420</span>         * &lt;/ul&gt;<a name="line.420"></a>
+<span class="sourceLineNo">421</span>         */<a name="line.421"></a>
+<span class="sourceLineNo">422</span>        public static SimulinkBlock getStateflowOutport(SimulinkOutPort outPort) {<a name="line.422"></a>
+<span class="sourceLineNo">423</span>                return getStateflowPort(outPort, SimulinkConstants.TYPE_OUTPORT);<a name="line.423"></a>
+<span class="sourceLineNo">424</span>        }<a name="line.424"></a>
+<span class="sourceLineNo">425</span><a name="line.425"></a>
+<span class="sourceLineNo">426</span>        /**<a name="line.426"></a>
+<span class="sourceLineNo">427</span>         * Obtain in port for stateflow block. See<a name="line.427"></a>
+<span class="sourceLineNo">428</span>         * {@link #getStateflowOutport(SimulinkOutPort)} for details.<a name="line.428"></a>
+<span class="sourceLineNo">429</span>         */<a name="line.429"></a>
+<span class="sourceLineNo">430</span>        public static SimulinkBlock getStateflowInport(SimulinkInPort inPort) {<a name="line.430"></a>
+<span class="sourceLineNo">431</span>                return getStateflowPort(inPort, SimulinkConstants.TYPE_INPORT);<a name="line.431"></a>
+<span class="sourceLineNo">432</span>        }<a name="line.432"></a>
+<span class="sourceLineNo">433</span><a name="line.433"></a>
+<span class="sourceLineNo">434</span>        /**<a name="line.434"></a>
+<span class="sourceLineNo">435</span>         * Obtain port for stateflow block. See<a name="line.435"></a>
+<span class="sourceLineNo">436</span>         * {@link #getStateflowOutport(SimulinkOutPort)} for details.<a name="line.436"></a>
+<span class="sourceLineNo">437</span>         */<a name="line.437"></a>
+<span class="sourceLineNo">438</span>        private static SimulinkBlock getStateflowPort(SimulinkPortBase port, String portType) throws AssertionError {<a name="line.438"></a>
+<span class="sourceLineNo">439</span>                CCSMAssert.isInstanceOf(port.getBlock(), StateflowBlock.class);<a name="line.439"></a>
+<span class="sourceLineNo">440</span>                SimulinkBlock result = null;<a name="line.440"></a>
+<span class="sourceLineNo">441</span>                for (SimulinkBlock block : port.getBlock().getSubBlocks()) {<a name="line.441"></a>
+<span class="sourceLineNo">442</span>                        if (portType.equals(block.getType())<a name="line.442"></a>
+<span class="sourceLineNo">443</span>                                        &amp;&amp; block.getParameter(SimulinkConstants.PARAM_PORT).equals(port.getIndex())) {<a name="line.443"></a>
+<span class="sourceLineNo">444</span>                                CCSMAssert.isTrue(result == null, "We assummed that there is only one matching port.");<a name="line.444"></a>
+<span class="sourceLineNo">445</span>                                result = block;<a name="line.445"></a>
+<span class="sourceLineNo">446</span>                        }<a name="line.446"></a>
+<span class="sourceLineNo">447</span>                }<a name="line.447"></a>
+<span class="sourceLineNo">448</span>                return result;<a name="line.448"></a>
+<span class="sourceLineNo">449</span>        }<a name="line.449"></a>
+<span class="sourceLineNo">450</span><a name="line.450"></a>
+<span class="sourceLineNo">451</span>        /** Visitor for counting sub blocks. */<a name="line.451"></a>
+<span class="sourceLineNo">452</span>        private static class BlockAndLineCounter implements IVisitor&lt;SimulinkBlock, NeverThrownRuntimeException&gt; {<a name="line.452"></a>
+<span class="sourceLineNo">453</span>                /** Counter for blocks. */<a name="line.453"></a>
+<span class="sourceLineNo">454</span>                private int blockCount = 0;<a name="line.454"></a>
+<span class="sourceLineNo">455</span><a name="line.455"></a>
+<span class="sourceLineNo">456</span>                /** Counter for lines. */<a name="line.456"></a>
+<span class="sourceLineNo">457</span>                private int lineCount = 0;<a name="line.457"></a>
+<span class="sourceLineNo">458</span><a name="line.458"></a>
+<span class="sourceLineNo">459</span>                /** Visit and count block. */<a name="line.459"></a>
+<span class="sourceLineNo">460</span>                @Override<a name="line.460"></a>
+<span class="sourceLineNo">461</span>                public void visit(SimulinkBlock element) {<a name="line.461"></a>
+<span class="sourceLineNo">462</span>                        blockCount++;<a name="line.462"></a>
+<span class="sourceLineNo">463</span>                        lineCount += element.getOutLines().size();<a name="line.463"></a>
+<span class="sourceLineNo">464</span>                }<a name="line.464"></a>
+<span class="sourceLineNo">465</span>        }<a name="line.465"></a>
+<span class="sourceLineNo">466</span><a name="line.466"></a>
+<span class="sourceLineNo">467</span>        /**<a name="line.467"></a>
+<span class="sourceLineNo">468</span>         * This method checks if two block have the same syntactic interface, i.e.<a name="line.468"></a>
+<span class="sourceLineNo">469</span>         * the same input and output ports.<a name="line.469"></a>
+<span class="sourceLineNo">470</span>         */<a name="line.470"></a>
+<span class="sourceLineNo">471</span>        public static boolean checkCompatibility(SimulinkBlock block1, SimulinkBlock block2) {<a name="line.471"></a>
+<span class="sourceLineNo">472</span>                boolean inPortsEqual = obtainPortIndexes(block1.getInPorts()).equals(obtainPortIndexes(block2.getInPorts()));<a name="line.472"></a>
+<span class="sourceLineNo">473</span>                boolean outPortsEqual = obtainPortIndexes(block1.getOutPorts()).equals(obtainPortIndexes(block2.getOutPorts()));<a name="line.473"></a>
+<span class="sourceLineNo">474</span>                return inPortsEqual &amp;&amp; outPortsEqual;<a name="line.474"></a>
+<span class="sourceLineNo">475</span>        }<a name="line.475"></a>
+<span class="sourceLineNo">476</span><a name="line.476"></a>
+<span class="sourceLineNo">477</span>        /** Creates a set of the indexes of the provided ports. */<a name="line.477"></a>
+<span class="sourceLineNo">478</span>        private static HashSet&lt;String&gt; obtainPortIndexes(Collection&lt;? extends SimulinkPortBase&gt; ports) {<a name="line.478"></a>
+<span class="sourceLineNo">479</span>                HashSet&lt;String&gt; indexes = new HashSet&lt;String&gt;();<a name="line.479"></a>
+<span class="sourceLineNo">480</span>                for (SimulinkPortBase port : ports) {<a name="line.480"></a>
+<span class="sourceLineNo">481</span>                        indexes.add(port.getIndex());<a name="line.481"></a>
+<span class="sourceLineNo">482</span>                }<a name="line.482"></a>
+<span class="sourceLineNo">483</span>                return indexes;<a name="line.483"></a>
+<span class="sourceLineNo">484</span>        }<a name="line.484"></a>
+<span class="sourceLineNo">485</span><a name="line.485"></a>
+<span class="sourceLineNo">486</span>        /**<a name="line.486"></a>
+<span class="sourceLineNo">487</span>         * Replaces this line with another line, copying the given parameter values.<a name="line.487"></a>
+<span class="sourceLineNo">488</span>         * This method removes {@code line} and creates a new line with the given<a name="line.488"></a>
+<span class="sourceLineNo">489</span>         * source and target ports.<a name="line.489"></a>
+<span class="sourceLineNo">490</span>         *<a name="line.490"></a>
+<span class="sourceLineNo">491</span>         * @param line<a name="line.491"></a>
+<span class="sourceLineNo">492</span>         *            The line to replace<a name="line.492"></a>
+<span class="sourceLineNo">493</span>         * @param sourcePort<a name="line.493"></a>
+<span class="sourceLineNo">494</span>         *            The source port of the new line<a name="line.494"></a>
+<span class="sourceLineNo">495</span>         * @param destinationPort<a name="line.495"></a>
+<span class="sourceLineNo">496</span>         *            The destination port of the new line<a name="line.496"></a>
+<span class="sourceLineNo">497</span>         * @param parameters<a name="line.497"></a>
+<span class="sourceLineNo">498</span>         *            The parameter that should be copied from {@code line} to the<a name="line.498"></a>
+<span class="sourceLineNo">499</span>         *            new line<a name="line.499"></a>
+<span class="sourceLineNo">500</span>         */<a name="line.500"></a>
+<span class="sourceLineNo">501</span>        public static SimulinkLine replaceLine(SimulinkLine line, SimulinkOutPort sourcePort,<a name="line.501"></a>
+<span class="sourceLineNo">502</span>                        SimulinkInPort destinationPort, String... parameters) {<a name="line.502"></a>
+<span class="sourceLineNo">503</span><a name="line.503"></a>
+<span class="sourceLineNo">504</span>                // Save the parameters, as they are not accessible once the line is<a name="line.504"></a>
+<span class="sourceLineNo">505</span>                // removed<a name="line.505"></a>
+<span class="sourceLineNo">506</span>                Map&lt;String, String&gt; paramValues = new HashMap&lt;String, String&gt;();<a name="line.506"></a>
+<span class="sourceLineNo">507</span>                for (String param : parameters) {<a name="line.507"></a>
+<span class="sourceLineNo">508</span>                        String value = line.getParameter(param);<a name="line.508"></a>
+<span class="sourceLineNo">509</span>                        paramValues.put(param, value);<a name="line.509"></a>
+<span class="sourceLineNo">510</span>                }<a name="line.510"></a>
+<span class="sourceLineNo">511</span><a name="line.511"></a>
+<span class="sourceLineNo">512</span>                // We have first to remove line before creating the replacement, as the<a name="line.512"></a>
+<span class="sourceLineNo">513</span>                // lines are not allowed to share an in-port<a name="line.513"></a>
+<span class="sourceLineNo">514</span>                line.remove();<a name="line.514"></a>
+<span class="sourceLineNo">515</span><a name="line.515"></a>
+<span class="sourceLineNo">516</span>                SimulinkBlock newContainer = getLowestCommonAncestor(sourcePort.getBlock().getParent(),<a name="line.516"></a>
+<span class="sourceLineNo">517</span>                                destinationPort.getBlock().getParent());<a name="line.517"></a>
+<span class="sourceLineNo">518</span>                SimulinkLine newLine = new SimulinkLine(sourcePort, destinationPort, newContainer);<a name="line.518"></a>
+<span class="sourceLineNo">519</span><a name="line.519"></a>
+<span class="sourceLineNo">520</span>                // Set the parameter values<a name="line.520"></a>
+<span class="sourceLineNo">521</span>                for (String param : parameters) {<a name="line.521"></a>
+<span class="sourceLineNo">522</span>                        String value = paramValues.get(param);<a name="line.522"></a>
+<span class="sourceLineNo">523</span>                        if (value != null) {<a name="line.523"></a>
+<span class="sourceLineNo">524</span>                                newLine.setParameter(param, value);<a name="line.524"></a>
+<span class="sourceLineNo">525</span>                        }<a name="line.525"></a>
+<span class="sourceLineNo">526</span>                }<a name="line.526"></a>
+<span class="sourceLineNo">527</span>                return newLine;<a name="line.527"></a>
+<span class="sourceLineNo">528</span>        }<a name="line.528"></a>
+<span class="sourceLineNo">529</span><a name="line.529"></a>
+<span class="sourceLineNo">530</span>        /**<a name="line.530"></a>
+<span class="sourceLineNo">531</span>         * Returns the deepest block that is a common ancestor of both blocks. This<a name="line.531"></a>
+<span class="sourceLineNo">532</span>         * requires both blocks to be in the same model<a name="line.532"></a>
+<span class="sourceLineNo">533</span>         */<a name="line.533"></a>
+<span class="sourceLineNo">534</span>        public static SimulinkBlock getLowestCommonAncestor(SimulinkBlock block1, SimulinkBlock block2) {<a name="line.534"></a>
+<span class="sourceLineNo">535</span>                CCSMAssert.isTrue(block1.getModel() == block2.getModel(), "Both blocks must be in same model!");<a name="line.535"></a>
+<span class="sourceLineNo">536</span><a name="line.536"></a>
+<span class="sourceLineNo">537</span>                Set&lt;SimulinkBlock&gt; parentSet1 = calculateParentSet(Collections.singletonList(block1));<a name="line.537"></a>
+<span class="sourceLineNo">538</span>                while (block2 != null) {<a name="line.538"></a>
+<span class="sourceLineNo">539</span>                        if (parentSet1.contains(block2)) {<a name="line.539"></a>
+<span class="sourceLineNo">540</span>                                return block2;<a name="line.540"></a>
+<span class="sourceLineNo">541</span>                        }<a name="line.541"></a>
+<span class="sourceLineNo">542</span>                        block2 = block2.getParent();<a name="line.542"></a>
+<span class="sourceLineNo">543</span>                }<a name="line.543"></a>
+<span class="sourceLineNo">544</span><a name="line.544"></a>
+<span class="sourceLineNo">545</span>                // blocks will meet at the model level<a name="line.545"></a>
+<span class="sourceLineNo">546</span>                return block1.getModel();<a name="line.546"></a>
+<span class="sourceLineNo">547</span>        }<a name="line.547"></a>
+<span class="sourceLineNo">548</span><a name="line.548"></a>
+<span class="sourceLineNo">549</span>        /** Returns a list of the given elements sorted by id. */<a name="line.549"></a>
+<span class="sourceLineNo">550</span>        public static &lt;T extends SimulinkElementBase&gt; List&lt;T&gt; sortById(Collection&lt;T&gt; blocks) {<a name="line.550"></a>
+<span class="sourceLineNo">551</span>                return CollectionUtils.sort(blocks, new Comparator&lt;T&gt;() {<a name="line.551"></a>
+<span class="sourceLineNo">552</span><a name="line.552"></a>
+<span class="sourceLineNo">553</span>                        @Override<a name="line.553"></a>
+<span class="sourceLineNo">554</span>                        public int compare(T block1, T block2) {<a name="line.554"></a>
+<span class="sourceLineNo">555</span>                                return block1.getId().compareTo(block2.getId());<a name="line.555"></a>
+<span class="sourceLineNo">556</span>                        }<a name="line.556"></a>
+<span class="sourceLineNo">557</span>                });<a name="line.557"></a>
+<span class="sourceLineNo">558</span>        }<a name="line.558"></a>
+<span class="sourceLineNo">559</span><a name="line.559"></a>
+<span class="sourceLineNo">560</span>        /**<a name="line.560"></a>
+<span class="sourceLineNo">561</span>         * Returns the first object contained in the given element of given class<a name="line.561"></a>
+<span class="sourceLineNo">562</span>         * (or null).<a name="line.562"></a>
+<span class="sourceLineNo">563</span>         *<a name="line.563"></a>
+<span class="sourceLineNo">564</span>         * @param element<a name="line.564"></a>
+<span class="sourceLineNo">565</span>         *            is this is null, null is returned.<a name="line.565"></a>
+<span class="sourceLineNo">566</span>         */<a name="line.566"></a>
+<span class="sourceLineNo">567</span>        public static SimulinkObject findObjectByClass(SimulinkElementBase element, String className) {<a name="line.567"></a>
+<span class="sourceLineNo">568</span>                if (element == null) {<a name="line.568"></a>
+<span class="sourceLineNo">569</span>                        return null;<a name="line.569"></a>
+<span class="sourceLineNo">570</span>                }<a name="line.570"></a>
+<span class="sourceLineNo">571</span>                for (SimulinkObject object : element.getObjects()) {<a name="line.571"></a>
+<span class="sourceLineNo">572</span>                        if (className.equals(object.getParameter(SimulinkConstants.PARAM_CLASS_NAME))<a name="line.572"></a>
+<span class="sourceLineNo">573</span>                                        || className.equals(object.getParameter(SimulinkConstants.PARAM_$CLASS_NAME))) {<a name="line.573"></a>
+<span class="sourceLineNo">574</span>                                return object;<a name="line.574"></a>
+<span class="sourceLineNo">575</span>                        }<a name="line.575"></a>
+<span class="sourceLineNo">576</span>                }<a name="line.576"></a>
+<span class="sourceLineNo">577</span>                return null;<a name="line.577"></a>
+<span class="sourceLineNo">578</span>        }<a name="line.578"></a>
+<span class="sourceLineNo">579</span><a name="line.579"></a>
+<span class="sourceLineNo">580</span>        /** Returns whether the given name starts or end with a slash. */<a name="line.580"></a>
+<span class="sourceLineNo">581</span>        public static boolean startsOrEndsWithSeparator(String name) {<a name="line.581"></a>
+<span class="sourceLineNo">582</span>                return name.startsWith(SIMULINK_ID_SEPARATOR) || name.endsWith(SIMULINK_ID_SEPARATOR);<a name="line.582"></a>
+<span class="sourceLineNo">583</span>        }<a name="line.583"></a>
+<span class="sourceLineNo">584</span><a name="line.584"></a>
+<span class="sourceLineNo">585</span>        /** Returns whether this block is an inport. */<a name="line.585"></a>
+<span class="sourceLineNo">586</span>        public static boolean isInport(SimulinkBlock block) {<a name="line.586"></a>
+<span class="sourceLineNo">587</span>                return SimulinkConstants.TYPE_INPORT.equals(block.getType());<a name="line.587"></a>
+<span class="sourceLineNo">588</span>        }<a name="line.588"></a>
+<span class="sourceLineNo">589</span><a name="line.589"></a>
+<span class="sourceLineNo">590</span>        /** Returns whether this block is an outport. */<a name="line.590"></a>
+<span class="sourceLineNo">591</span>        public static boolean isOutport(SimulinkBlock block) {<a name="line.591"></a>
+<span class="sourceLineNo">592</span>                return SimulinkConstants.TYPE_OUTPORT.equals(block.getType());<a name="line.592"></a>
+<span class="sourceLineNo">593</span>        }<a name="line.593"></a>
+<span class="sourceLineNo">594</span><a name="line.594"></a>
+<span class="sourceLineNo">595</span>        /** Returns whether the given block is a round sum block. */<a name="line.595"></a>
+<span class="sourceLineNo">596</span>        public static boolean isRoundSum(SimulinkBlock block) {<a name="line.596"></a>
+<span class="sourceLineNo">597</span>                return SimulinkConstants.TYPE_SUM.equals(block.getType())<a name="line.597"></a>
+<span class="sourceLineNo">598</span>                                &amp;&amp; SimulinkConstants.VALUE_SHAPE_ROUND.equals(block.getParameter(SimulinkConstants.PARAM_ICON_SHAPE));<a name="line.598"></a>
+<span class="sourceLineNo">599</span>        }<a name="line.599"></a>
+<span class="sourceLineNo">600</span><a name="line.600"></a>
+<span class="sourceLineNo">601</span>        /** Returns whether the given block is a function call split block. */<a name="line.601"></a>
+<span class="sourceLineNo">602</span>        public static boolean isFunctionCallSplitBlock(SimulinkBlock block) {<a name="line.602"></a>
+<span class="sourceLineNo">603</span>                return SimulinkConstants.TYPE_FUNCTION_CALL_SPLIT.equals(block.getType());<a name="line.603"></a>
+<span class="sourceLineNo">604</span>        }<a name="line.604"></a>
+<span class="sourceLineNo">605</span><a name="line.605"></a>
+<span class="sourceLineNo">606</span>        /** Returns whether the given block is a Stateflow chart. */<a name="line.606"></a>
+<span class="sourceLineNo">607</span>        public static boolean isStateflowChart(SimulinkBlock block) {<a name="line.607"></a>
+<span class="sourceLineNo">608</span>                return SimulinkConstants.SUBSYSTEM.equals(block.getType())<a name="line.608"></a>
+<span class="sourceLineNo">609</span>                                &amp;&amp; SimulinkConstants.VALUE_CHART.equals(block.getParameter(SimulinkConstants.PARAM_SF_BLOCK_TYPE));<a name="line.609"></a>
+<span class="sourceLineNo">610</span><a name="line.610"></a>
+<span class="sourceLineNo">611</span>        }<a name="line.611"></a>
+<span class="sourceLineNo">612</span><a name="line.612"></a>
+<span class="sourceLineNo">613</span>        /** Replaces Simulink line breaks with "real" line breaks. */<a name="line.613"></a>
+<span class="sourceLineNo">614</span>        public static String replaceSimulinkLineBreaks(String name) {<a name="line.614"></a>
+<span class="sourceLineNo">615</span>                // sometimes there are two backslashes<a name="line.615"></a>
+<span class="sourceLineNo">616</span>                return name.replaceAll("\\\\?\\\\n", StringUtils.LINE_SEPARATOR);<a name="line.616"></a>
+<span class="sourceLineNo">617</span>        }<a name="line.617"></a>
+<span class="sourceLineNo">618</span><a name="line.618"></a>
+<span class="sourceLineNo">619</span>        /** Returns the object id of a Simulink object or null. */<a name="line.619"></a>
+<span class="sourceLineNo">620</span>        public static String getObjectId(SimulinkObject object) {<a name="line.620"></a>
+<span class="sourceLineNo">621</span>                String id = object.getParameter(SimulinkConstants.PARAM_$OBJECT_ID);<a name="line.621"></a>
+<span class="sourceLineNo">622</span>                if (id != null) {<a name="line.622"></a>
+<span class="sourceLineNo">623</span>                        return id;<a name="line.623"></a>
+<span class="sourceLineNo">624</span>                }<a name="line.624"></a>
+<span class="sourceLineNo">625</span>                return object.getParameter(SimulinkConstants.PARAM_OBJECT_ID);<a name="line.625"></a>
+<span class="sourceLineNo">626</span>        }<a name="line.626"></a>
+<span class="sourceLineNo">627</span><a name="line.627"></a>
+<span class="sourceLineNo">628</span>        /**<a name="line.628"></a>
+<span class="sourceLineNo">629</span>         * Recursive method to traverse a tree of stateflow objects (using e as root<a name="line.629"></a>
+<span class="sourceLineNo">630</span>         * node). Prints information on each object and hierarchy on the<a name="line.630"></a>
+<span class="sourceLineNo">631</span>         * PrintStream.<a name="line.631"></a>
+<span class="sourceLineNo">632</span>         */<a name="line.632"></a>
+<span class="sourceLineNo">633</span>        public static void printStateflowElement(StateflowElementBase&lt;? extends IStateflowElement&lt;?&gt;&gt; element) {<a name="line.633"></a>
+<span class="sourceLineNo">634</span>                printStateflowElement(element, System.out);<a name="line.634"></a>
+<span class="sourceLineNo">635</span>        }<a name="line.635"></a>
+<span class="sourceLineNo">636</span><a name="line.636"></a>
+<span class="sourceLineNo">637</span>        /**<a name="line.637"></a>
+<span class="sourceLineNo">638</span>         * Recursive method to traverse a tree of stateflow objects (using e as root<a name="line.638"></a>
+<span class="sourceLineNo">639</span>         * node). Prints information on each object and hierarchy on the<a name="line.639"></a>
+<span class="sourceLineNo">640</span>         * PrintStream.<a name="line.640"></a>
+<span class="sourceLineNo">641</span>         */<a name="line.641"></a>
+<span class="sourceLineNo">642</span>        public static void printStateflowElement(StateflowElementBase&lt;? extends IStateflowElement&lt;?&gt;&gt; element,<a name="line.642"></a>
+<span class="sourceLineNo">643</span>                        PrintStream out) {<a name="line.643"></a>
+<span class="sourceLineNo">644</span>                printStateflowElementRecursive(element, out, 0);<a name="line.644"></a>
+<span class="sourceLineNo">645</span>        }<a name="line.645"></a>
+<span class="sourceLineNo">646</span><a name="line.646"></a>
+<span class="sourceLineNo">647</span>        /**<a name="line.647"></a>
+<span class="sourceLineNo">648</span>         * Recursive method to traverse a tree of stateflow objects (using element<a name="line.648"></a>
+<span class="sourceLineNo">649</span>         * as root node). Prints information on each object and hierarchy on the<a name="line.649"></a>
+<span class="sourceLineNo">650</span>         * PrintStream.<a name="line.650"></a>
+<span class="sourceLineNo">651</span>         */<a name="line.651"></a>
+<span class="sourceLineNo">652</span>        private static void printStateflowElementRecursive(StateflowElementBase&lt;? extends IStateflowElement&lt;?&gt;&gt; element,<a name="line.652"></a>
+<span class="sourceLineNo">653</span>                        PrintStream out, int intendation) {<a name="line.653"></a>
+<span class="sourceLineNo">654</span><a name="line.654"></a>
+<span class="sourceLineNo">655</span>                String tabs = StringUtils.fillString(intendation, '\t');<a name="line.655"></a>
+<span class="sourceLineNo">656</span>                out.println(<a name="line.656"></a>
+<span class="sourceLineNo">657</span>                                tabs + element.getClass().getSimpleName() + " " + element.getStateflowId() + " " + element.toString());<a name="line.657"></a>
+<span class="sourceLineNo">658</span><a name="line.658"></a>
+<span class="sourceLineNo">659</span>                if (element instanceof StateflowChart) {<a name="line.659"></a>
+<span class="sourceLineNo">660</span>                        StateflowChart chart = (StateflowChart) element;<a name="line.660"></a>
+<span class="sourceLineNo">661</span>                        int unconnectedTransitions = chart.getUnconnectedTransitions().size();<a name="line.661"></a>
+<span class="sourceLineNo">662</span>                        if (unconnectedTransitions &gt; 0) {<a name="line.662"></a>
+<span class="sourceLineNo">663</span>                                out.println(unconnectedTransitions + " unconnected transitions in chart");<a name="line.663"></a>
+<span class="sourceLineNo">664</span>                        }<a name="line.664"></a>
+<span class="sourceLineNo">665</span>                        for (StateflowNodeBase node : chart.getNodes()) {<a name="line.665"></a>
+<span class="sourceLineNo">666</span>                                printStateflowElementRecursive(node, out, intendation + 1);<a name="line.666"></a>
+<span class="sourceLineNo">667</span>                        }<a name="line.667"></a>
+<span class="sourceLineNo">668</span>                }<a name="line.668"></a>
+<span class="sourceLineNo">669</span>                if (element instanceof StateflowState) {<a name="line.669"></a>
+<span class="sourceLineNo">670</span>                        printStateflowStateExtraInformation(out, tabs, (StateflowState) element);<a name="line.670"></a>
+<span class="sourceLineNo">671</span>                }<a name="line.671"></a>
+<span class="sourceLineNo">672</span>                if (element instanceof StateflowNodeBase) {<a name="line.672"></a>
+<span class="sourceLineNo">673</span>                        printOutgoingTransitions(out, tabs, (StateflowNodeBase) element);<a name="line.673"></a>
+<span class="sourceLineNo">674</span>                }<a name="line.674"></a>
+<span class="sourceLineNo">675</span>                if (element instanceof StateflowState) {<a name="line.675"></a>
+<span class="sourceLineNo">676</span>                        printStateflowStateSubNodes(out, tabs, intendation, (StateflowState) element);<a name="line.676"></a>
+<span class="sourceLineNo">677</span>                }<a name="line.677"></a>
+<span class="sourceLineNo">678</span>        }<a name="line.678"></a>
+<span class="sourceLineNo">679</span><a name="line.679"></a>
+<span class="sourceLineNo">680</span>        /**<a name="line.680"></a>
+<span class="sourceLineNo">681</span>         * Prints the outgoing transitions of the passed StateflowElement.<a name="line.681"></a>
+<span class="sourceLineNo">682</span>         */<a name="line.682"></a>
+<span class="sourceLineNo">683</span>        private static void printOutgoingTransitions(PrintStream out, String tabs, StateflowNodeBase element) {<a name="line.683"></a>
+<span class="sourceLineNo">684</span>                UnmodifiableSet&lt;StateflowTransition&gt; outTransitions = element.getOutTransitions();<a name="line.684"></a>
+<span class="sourceLineNo">685</span>                if (!outTransitions.isEmpty()) {<a name="line.685"></a>
+<span class="sourceLineNo">686</span>                        out.println(tabs + "|outgoing transitions:");<a name="line.686"></a>
+<span class="sourceLineNo">687</span>                        for (StateflowTransition transition : outTransitions) {<a name="line.687"></a>
+<span class="sourceLineNo">688</span>                                out.println(tabs + "\tto " + transition.getDst().getStateflowId() + ": " + transition.getLabel());<a name="line.688"></a>
+<span class="sourceLineNo">689</span>                        }<a name="line.689"></a>
+<span class="sourceLineNo">690</span>                }<a name="line.690"></a>
+<span class="sourceLineNo">691</span>        }<a name="line.691"></a>
+<span class="sourceLineNo">692</span><a name="line.692"></a>
+<span class="sourceLineNo">693</span>        /**<a name="line.693"></a>
+<span class="sourceLineNo">694</span>         * Prints additional information specific to StateflowStates (e.g., whether<a name="line.694"></a>
+<span class="sourceLineNo">695</span>         * it contains a subchart or a truth table).<a name="line.695"></a>
+<span class="sourceLineNo">696</span>         *<a name="line.696"></a>
+<span class="sourceLineNo">697</span>         * @param out<a name="line.697"></a>
+<span class="sourceLineNo">698</span>         *            print stream<a name="line.698"></a>
+<span class="sourceLineNo">699</span>         * @param tabs<a name="line.699"></a>
+<span class="sourceLineNo">700</span>         *            the indentation tabs.<a name="line.700"></a>
+<span class="sourceLineNo">701</span>         * @param state<a name="line.701"></a>
+<span class="sourceLineNo">702</span>         *            the {@link StateflowState} to print<a name="line.702"></a>
+<span class="sourceLineNo">703</span>         */<a name="line.703"></a>
+<span class="sourceLineNo">704</span>        private static void printStateflowStateExtraInformation(PrintStream out, String tabs, StateflowState state) {<a name="line.704"></a>
+<span class="sourceLineNo">705</span>                if (state.isSubChart()) {<a name="line.705"></a>
+<span class="sourceLineNo">706</span>                        StateflowChartRenderer.renderChart(state.getSubViewer());<a name="line.706"></a>
+<span class="sourceLineNo">707</span>                        out.println(tabs + "This node is a subchart!");<a name="line.707"></a>
+<span class="sourceLineNo">708</span>                        out.println(tabs + "Parent: " + state.getParentChart().getParent());<a name="line.708"></a>
+<span class="sourceLineNo">709</span>                }<a name="line.709"></a>
+<span class="sourceLineNo">710</span>                if (state instanceof StateflowTruthTable) {<a name="line.710"></a>
+<span class="sourceLineNo">711</span>                        StateflowTruthTable truthTable = (StateflowTruthTable) state;<a name="line.711"></a>
+<span class="sourceLineNo">712</span>                        out.println("--------- script ---------");<a name="line.712"></a>
+<span class="sourceLineNo">713</span>                        out.println(truthTable.getScript());<a name="line.713"></a>
+<span class="sourceLineNo">714</span>                        out.println("------- end script -------");<a name="line.714"></a>
+<span class="sourceLineNo">715</span>                }<a name="line.715"></a>
+<span class="sourceLineNo">716</span>        }<a name="line.716"></a>
+<span class="sourceLineNo">717</span><a name="line.717"></a>
+<span class="sourceLineNo">718</span>        /**<a name="line.718"></a>
+<span class="sourceLineNo">719</span>         * Invokes recursive printing of the subnodes of the passed state. (calls<a name="line.719"></a>
+<span class="sourceLineNo">720</span>         * printStateflowElementRecursive)<a name="line.720"></a>
+<span class="sourceLineNo">721</span>         */<a name="line.721"></a>
+<span class="sourceLineNo">722</span>        private static void printStateflowStateSubNodes(PrintStream out, String tabs, int intendation,<a name="line.722"></a>
+<span class="sourceLineNo">723</span>                        StateflowState state) {<a name="line.723"></a>
+<span class="sourceLineNo">724</span>                if (!state.getNodes().isEmpty()) {<a name="line.724"></a>
+<span class="sourceLineNo">725</span>                        out.println(tabs + "|subnodes:");<a name="line.725"></a>
+<span class="sourceLineNo">726</span>                        for (StateflowNodeBase node : state.getNodes()) {<a name="line.726"></a>
+<span class="sourceLineNo">727</span>                                printStateflowElementRecursive(node, out, intendation + 1);<a name="line.727"></a>
+<span class="sourceLineNo">728</span>                        }<a name="line.728"></a>
+<span class="sourceLineNo">729</span>                }<a name="line.729"></a>
+<span class="sourceLineNo">730</span>                if (state.isSubChart() &amp;&amp; !state.getSubViewer().getNodes().isEmpty()) {<a name="line.730"></a>
+<span class="sourceLineNo">731</span>                        out.println(tabs + "|subchart nodes:");<a name="line.731"></a>
+<span class="sourceLineNo">732</span>                        for (StateflowNodeBase node : state.getSubViewer().getNodes()) {<a name="line.732"></a>
+<span class="sourceLineNo">733</span>                                printStateflowElementRecursive(node, out, intendation + 1);<a name="line.733"></a>
+<span class="sourceLineNo">734</span>                        }<a name="line.734"></a>
+<span class="sourceLineNo">735</span>                }<a name="line.735"></a>
+<span class="sourceLineNo">736</span>        }<a name="line.736"></a>
+<span class="sourceLineNo">737</span><a name="line.737"></a>
+<span class="sourceLineNo">738</span>        /** Returns all transitions in a chart in a stable order. */<a name="line.738"></a>
+<span class="sourceLineNo">739</span>        public static List&lt;StateflowTransition&gt; getAllTransitions(StateflowChart chart) {<a name="line.739"></a>
+<span class="sourceLineNo">740</span>                Set&lt;StateflowTransition&gt; transitions = new IdentityHashSet&lt;&gt;(chart.getUnconnectedTransitions());<a name="line.740"></a>
+<span class="sourceLineNo">741</span>                addTransitions(chart, transitions);<a name="line.741"></a>
+<span class="sourceLineNo">742</span><a name="line.742"></a>
+<span class="sourceLineNo">743</span>                // Sort by toString() to get stable test results<a name="line.743"></a>
+<span class="sourceLineNo">744</span>                return CollectionUtils.sort(transitions, Comparator.comparing(StateflowTransition::toString));<a name="line.744"></a>
+<span class="sourceLineNo">745</span>        }<a name="line.745"></a>
+<span class="sourceLineNo">746</span><a name="line.746"></a>
+<span class="sourceLineNo">747</span>        /** Recursively adds transitions */<a name="line.747"></a>
+<span class="sourceLineNo">748</span>        private static void addTransitions(IStateflowNodeContainer&lt;?&gt; container, Set&lt;StateflowTransition&gt; transitions) {<a name="line.748"></a>
+<span class="sourceLineNo">749</span>                for (StateflowNodeBase node : container.getNodes()) {<a name="line.749"></a>
+<span class="sourceLineNo">750</span>                        transitions.addAll(node.getInTransitions());<a name="line.750"></a>
+<span class="sourceLineNo">751</span>                        transitions.addAll(node.getOutTransitions());<a name="line.751"></a>
+<span class="sourceLineNo">752</span><a name="line.752"></a>
+<span class="sourceLineNo">753</span>                        if (node instanceof StateflowState) {<a name="line.753"></a>
+<span class="sourceLineNo">754</span>                                addTransitions((StateflowState) node, transitions);<a name="line.754"></a>
+<span class="sourceLineNo">755</span>                        }<a name="line.755"></a>
+<span class="sourceLineNo">756</span>                }<a name="line.756"></a>
+<span class="sourceLineNo">757</span>        }<a name="line.757"></a>
+<span class="sourceLineNo">758</span>}<a name="line.758"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

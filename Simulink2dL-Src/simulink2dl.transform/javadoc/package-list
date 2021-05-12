@@ -1,0 +1,10 @@
+org.conqat.lib.simulink.builder
+org.conqat.lib.simulink.constraints
+org.conqat.lib.simulink.model
+org.conqat.lib.simulink.model.datahandler
+org.conqat.lib.simulink.model.datahandler.simulink
+org.conqat.lib.simulink.model.datahandler.stateflow
+org.conqat.lib.simulink.model.stateflow
+org.conqat.lib.simulink.targetlink
+org.conqat.lib.simulink.ui
+org.conqat.lib.simulink.util
