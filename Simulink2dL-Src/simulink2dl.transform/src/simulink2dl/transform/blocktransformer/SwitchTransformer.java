@@ -74,10 +74,6 @@ public class SwitchTransformer extends BlockTransformer {
 		String type = "Switch";
 		checkBlock(type, block);
 
-		// add variable
-		Variable variable = new Variable("R", block.getName());
-		dlModel.addVariable(variable);
-
 		// get connected ports
 		SimulinkOutPort caseTruePort = environment.getConnectedOuputPort(block, 1);
 		String caseTruePortID = environment.getPortID(caseTruePort);

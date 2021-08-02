@@ -48,6 +48,7 @@ import simulink2dl.dlmodel.operator.formula.Relation.RelationType;
 import simulink2dl.dlmodel.term.AdditionTerm;
 import simulink2dl.dlmodel.term.BracketTerm;
 import simulink2dl.dlmodel.term.ExponentTerm;
+import simulink2dl.dlmodel.term.MinMaxTerm;
 import simulink2dl.dlmodel.term.MultiplicationTerm;
 import simulink2dl.dlmodel.term.RealTerm;
 import simulink2dl.dlmodel.term.StringTerm;
@@ -135,6 +136,8 @@ public class FormulaChecker {
 			return this.simulink2dlExponentTermToZ3ArithExpr((ExponentTerm) term);
 		} else if (term instanceof MultiplicationTerm) {
 			return this.simulink2dlMultiplicationTermToZ3ArithExpr((MultiplicationTerm) term);
+		} else if (term instanceof MinMaxTerm) {
+			return this.simulink2dlMinMaxTermToZ3ArithExpr((MinMaxTerm) term);
 		} else { // default case
 			PluginLogger.error("Can not convert " + term.getClass() + " to ArithExpr.");
 			return null;
@@ -206,6 +209,18 @@ public class FormulaChecker {
 			result = this.Z3Context.mkDiv(result, div);
 		}
 		return result;
+	}
+	
+	/**
+	 * Converts a simulink2dl MinMaxTerm into a ArithExpr. See
+	 * simulink2dlTermToZ3ArithExpr for more information.
+	 * 
+	 * @param minMaxTerm
+	 * @return
+	 */
+	private ArithExpr simulink2dlMinMaxTermToZ3ArithExpr(MinMaxTerm minMaxTerm) {
+		//ToDo improve
+		return this.Z3Context.mkRealConst(minMaxTerm.toString());
 	}
 
 	// Terms //
